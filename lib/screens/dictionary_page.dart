@@ -2,12 +2,11 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:glas_client/api/phrase_response_dto.dart';
+import 'package:glas_client/shared/drawer_menu.dart';
 import 'package:http/http.dart' as http;
 
 class DictionaryPage extends StatefulWidget {
-  const DictionaryPage({Key? key, required this.title}) : super(key: key);
-
-  final String title;
+  const DictionaryPage({Key? key}) : super(key: key);
 
   @override
   State<DictionaryPage> createState() => _DictionaryPageState();
@@ -37,8 +36,9 @@ class _DictionaryPageState extends State<DictionaryPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
+        title: const Text("Dictionary"),
       ),
+      drawer: const DrawerMenu(),
       body: ListView(
         shrinkWrap: true,
         scrollDirection: Axis.vertical,

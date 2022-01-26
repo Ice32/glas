@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:glas_client/screens/dictionary_page.dart';
+import 'package:glas_client/screens/import_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -15,7 +16,11 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const DictionaryPage(title: 'Glas dictionary'),
+      routes: {
+        "/dictionary": (context) => DictionaryPage(),
+        "/import": (context) => ImportPage()
+      },
+      initialRoute: "/dictionary",
     );
   }
 }
