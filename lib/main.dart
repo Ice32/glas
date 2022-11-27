@@ -3,6 +3,7 @@ import 'package:get_it/get_it.dart';
 import 'package:glas_client/api/glas_http_client.dart';
 import 'package:glas_client/screens/create_import_page.dart';
 import 'package:glas_client/screens/dictionary_page.dart';
+import 'package:glas_client/screens/imports_page.dart';
 import 'package:glas_client/service/import/import_service.dart';
 
 final getIt = GetIt.instance;
@@ -24,8 +25,9 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       routes: {
-        "/dictionary": (context) => DictionaryPage(),
-        "/import": (context) => CreateImportPage()
+        "/dictionary": (context) => const DictionaryPage(),
+        "/import": (context) => const CreateImportPage(),
+        "/imports": (context) => const ImportsPage()
       },
       initialRoute: "/dictionary",
     );

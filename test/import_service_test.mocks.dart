@@ -69,4 +69,27 @@ class MockGlasHttpClient extends _i1.Mock implements _i3.GlasHttpClient {
           ),
         )),
       ) as _i4.Future<_i2.Response>);
+
+  @override
+  _i4.Future<_i2.Response> get(String? path) => (super.noSuchMethod(
+        Invocation.method(
+          #get,
+          [path],
+        ),
+        returnValue: _i4.Future<_i2.Response>.value(_FakeResponse_0(
+          this,
+          Invocation.method(
+            #get,
+            [path],
+          ),
+        )),
+        returnValueForMissingStub:
+            _i4.Future<_i2.Response>.value(_FakeResponse_0(
+          this,
+          Invocation.method(
+            #get,
+            [path],
+          ),
+        )),
+      ) as _i4.Future<_i2.Response>);
 }

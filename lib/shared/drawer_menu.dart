@@ -16,6 +16,7 @@ class DrawerMenu extends StatelessWidget {
     final List<String> items = [
       "Import",
       "Dictionary",
+      "Imports",
     ];
 
     final List<Widget> widgets = [];
@@ -41,6 +42,9 @@ class DrawerMenu extends StatelessWidget {
               break;
             case "Dictionary":
               screen = "/dictionary";
+              break;
+            case "Imports":
+              screen = "/imports";
               break;
           }
           var navigator = Navigator.of(context);

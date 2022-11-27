@@ -19,13 +19,13 @@ class _CreateImportPageState extends State<CreateImportPage> {
 
   final importTextController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
-  final importAPI = GetIt.instance.get<ImportService>();
+  final importService = GetIt.instance.get<ImportService>();
 
   void submitPressed() async {
     if (_formKey.currentState!.validate()) {
       var scaffoldMessenger = ScaffoldMessenger.of(context);
       try {
-        await importAPI.createImport(importTextController.text);
+        await importService.createImport(importTextController.text);
         scaffoldMessenger.showSnackBar(
           const SnackBar(content: Text('Processing your import')),
         );
