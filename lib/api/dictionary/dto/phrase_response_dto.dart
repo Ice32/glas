@@ -1,4 +1,4 @@
-import 'package:glas_client/api/translation_dto.dart';
+import 'package:glas_client/api/dictionary/dto/translation_dto.dart';
 
 class PhraseResponseDTO {
   final String phrase;
@@ -11,12 +11,12 @@ class PhraseResponseDTO {
 
   factory PhraseResponseDTO.fromJson(Map<String, dynamic> jsonValue) {
     var list = jsonValue['translations'] as List;
-    List<TranslationDTO> translationDtos =
+    List<TranslationDTO> translationDTOs =
         list.map((i) => TranslationDTO.fromJson(i)).toList();
 
     return PhraseResponseDTO(
       phrase: jsonValue['phrase'],
-      translations: translationDtos,
+      translations: translationDTOs,
     );
   }
 }

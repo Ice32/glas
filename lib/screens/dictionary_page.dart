@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:glas_client/api/phrase_response_dto.dart';
+import 'package:glas_client/api/dictionary/dto/phrase_response_dto.dart';
 import 'package:glas_client/shared/drawer_menu.dart';
 import 'package:http/http.dart' as http;
 

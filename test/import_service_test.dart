@@ -1,0 +1,61 @@
+import 'package:flutter_test/flutter_test.dart';
+import 'package:get_it/get_it.dart';
+import 'package:glas_client/api/glas_http_client.dart';
+import 'package:glas_client/service/import/import_service.dart';
+import 'package:http/http.dart' as http;
+import 'package:mockito/annotations.dart';
+import 'package:mockito/mockito.dart';
+
+import 'import_service_test.mocks.dart';
+
+final getIt = GetIt.instance;
+
+void stubResponseStatus(MockGlasHttpClient client, int status) {
+  when(client.post('imports', any))
+      .thenAnswer((realInvocation) => Future.value(http.Response('', status)));
+}
+
+@GenerateNiceMocks([MockSpec<GlasHttpClient>()])
+void main() {
+  group('Import service', () {
+    late MockGlasHttpClient client;
+
+    setUp(() {
+      var glasHttpClient = MockGlasHttpClient();
+      getIt.registerSingleton<GlasHttpClient>(glasHttpClient);
+      client = glasHttpClient;
+    });
+
+    tearDown(() {
+      getIt.reset();
+    });
+
+    group('Create import', () {
+      test('should call http client', () async {
+        when(client.post('imports', any)).thenAnswer(
+            (realInvocation) => Future.value(http.Response('', 204)));
+        const text = "an import text";
+
+        await ImportService().createImport(text);
+
+        verify(client.post('imports', {'text': text}));
+      });
+
+      test('should throw exception if response status less than 200', () async {
+        when(client.post('imports', any)).thenAnswer(
+            (realInvocation) => Future.value(http.Response('', 199)));
+        const text = "an import text";
+
+        expect(() async => ImportService().createImport(text), throwsException);
+      });
+
+      test('should throw exception if response status > 299', () async {
+        when(client.post('imports', any)).thenAnswer(
+            (realInvocation) => Future.value(http.Response('', 300)));
+        const text = "an import text";
+
+        expect(() async => ImportService().createImport(text), throwsException);
+      });
+    });
+  });
+}
