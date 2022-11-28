@@ -40,14 +40,21 @@ class _ImportsPageState extends State<ImportsPage> {
       body: FutureBuilder<List<ImportDTO>>(
         future: importService.getImports(),
         builder: (context, snapshot) {
-          if (!snapshot.hasData) {
-            return ListView(children: const []);
+          if (snapshot.hasData) {
+            return ListView.builder(
+                itemCount: snapshot.data!.length,
+                itemBuilder: (context, index) => Card(
+                    child: ListTile(
+                        title: Text(snapshot.data?[index].text ?? ''))));
           }
-          return ListView.builder(
-              itemCount: snapshot.data!.length,
-              itemBuilder: (context, index) => Card(
-                  child:
-                      ListTile(title: Text(snapshot.data?[index].text ?? ''))));
+          if (snapshot.hasError) {
+            print(snapshot.error);
+            return ListView.builder(
+              itemCount: 0,
+              itemBuilder: (context, index) => const Card(),
+            );
+          }
+          return ListView(children: const []);
         },
       ),
       floatingActionButton: FloatingActionButton(

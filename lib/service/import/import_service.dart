@@ -9,12 +9,12 @@ import '../../api/glas_import/dto/import_dto.dart';
 class ImportService {
   final GlasHttpClient httpClient = GetIt.instance.get<GlasHttpClient>();
 
-  Future<void> createImport(String text) async {
-    final response =
-        await httpClient.post('imports', CreateImportDTO(text: text).toJson());
+  Future<void> createImport(String title, String text) async {
+    final response = await httpClient.post(
+        'imports', CreateImportDTO(title: title, text: text).toJson());
 
     if (response.statusCode < 200 || response.statusCode >= 300) {
-      throw Exception('Failed to create import: ${response.statusCode}');
+      throw Exception('Failed to create import: ${response.reasonPhrase}');
     }
   }
 
@@ -22,7 +22,7 @@ class ImportService {
     final response = await httpClient.get('imports');
 
     if (response.statusCode < 200 || response.statusCode >= 300) {
-      throw Exception('Failed to retrieve imports: ${response.statusCode}');
+      throw Exception('Failed to retrieve imports: ${response.reasonPhrase}');
     }
 
     final imports = jsonDecode(response.body) as List;

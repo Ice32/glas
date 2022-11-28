@@ -40,22 +40,12 @@ void main() {
     getIt.reset();
   });
 
-  group('Create import page widget test', () {
-    testWidgets('should render text field and button',
-        (WidgetTester tester) async {
-      await tester.pumpWidget(importPage(importPageScaffoldKey));
+  testWidgets('Create import page - golden', (WidgetTester tester) async {
+    when(httpClient.post('imports', any))
+        .thenAnswer((realInvocation) => Future.value(http.Response('', 204)));
+    await tester.pumpWidget(importPage(importPageScaffoldKey));
 
-      expect(find.byType(TextFormField), findsOneWidget);
-      expect(find.text('Import'), findsNWidgets(2));
-    });
-
-    testWidgets('Create import page - golden', (WidgetTester tester) async {
-      when(httpClient.post('imports', any))
-          .thenAnswer((realInvocation) => Future.value(http.Response('', 204)));
-      await tester.pumpWidget(importPage(importPageScaffoldKey));
-
-      await expectLater(find.byType(CreateImportPage),
-          matchesGoldenFile('createImportPage.png'));
-    });
+    await expectLater(find.byType(CreateImportPage),
+        matchesGoldenFile('createImportPage.png'));
   });
 }

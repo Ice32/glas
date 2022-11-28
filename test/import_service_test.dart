@@ -38,26 +38,29 @@ void main() {
         when(client.post('imports', any)).thenAnswer(
             (realInvocation) => Future.value(http.Response('', 204)));
         const text = "an import text";
+        const title = "an import title";
 
-        await ImportService().createImport(text);
+        await ImportService().createImport(title, text);
 
-        verify(client.post('imports', {'text': text}));
+        verify(client.post('imports', {'title': title, 'text': text}));
       });
 
       test('should throw exception if response status less than 200', () async {
         when(client.post('imports', any)).thenAnswer(
             (realInvocation) => Future.value(http.Response('', 199)));
-        const text = "an import text";
 
-        expect(() async => ImportService().createImport(text), throwsException);
+        expect(
+            () async => ImportService().createImport('title', 'an import text'),
+            throwsException);
       });
 
       test('should throw exception if response status > 299', () async {
         when(client.post('imports', any)).thenAnswer(
             (realInvocation) => Future.value(http.Response('', 300)));
-        const text = "an import text";
 
-        expect(() async => ImportService().createImport(text), throwsException);
+        expect(
+            () async => ImportService().createImport('title', 'an import text'),
+            throwsException);
       });
     });
 

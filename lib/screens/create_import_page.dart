@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:glas_client/screens/imports_page.dart';
 import 'package:glas_client/service/import/import_service.dart';
 import 'package:glas_client/service/import/import_validator.dart';
 import 'package:glas_client/shared/drawer_menu.dart';
@@ -18,6 +19,7 @@ class _CreateImportPageState extends State<CreateImportPage> {
   }
 
   final importTextController = TextEditingController();
+  final importTitleController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   final importService = GetIt.instance.get<ImportService>();
 
@@ -25,17 +27,26 @@ class _CreateImportPageState extends State<CreateImportPage> {
     if (_formKey.currentState!.validate()) {
       var scaffoldMessenger = ScaffoldMessenger.of(context);
       try {
-        await importService.createImport(importTextController.text);
+        await importService.createImport(
+            importTitleController.text, importTextController.text);
         scaffoldMessenger.showSnackBar(
           const SnackBar(content: Text('Processing your import')),
         );
-        importTextController.clear();
+        navigateToImportsPage();
       } catch (ex) {
+        print(ex.toString());
         scaffoldMessenger.showSnackBar(
           const SnackBar(content: Text('Unknown error occurred')),
         );
       }
     }
+  }
+
+  void navigateToImportsPage() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const ImportsPage()),
+    );
   }
 
   @override
@@ -50,6 +61,12 @@ class _CreateImportPageState extends State<CreateImportPage> {
             child: Column(
               children: [
                 TextFormField(
+                  key: const Key('importTitleField'),
+                  controller: importTitleController,
+                  validator: ImportValidator.validateImportTitle,
+                ),
+                TextFormField(
+                  key: const Key('importTextField'),
                   controller: importTextController,
                   keyboardType: TextInputType.multiline,
                   maxLines: null,
