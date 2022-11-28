@@ -53,16 +53,16 @@ void main() {
   group('Imports page widget test', () {
     testWidgets('should render imports', (WidgetTester tester) async {
       stubImportsResponse(httpClient, [
-        ImportDTO(text: 'Import 1 text', id: 1),
-        ImportDTO(text: 'Import 2 text', id: 2)
+        ImportDTO(title: 'Import 1 title', text: 'Import 1 text', id: 1),
+        ImportDTO(title: 'Import 2 title', text: 'Import 2 text', id: 2)
       ]);
 
       await tester.pumpWidget(importsPage(importsPageScaffoldKey));
       await tester.pumpAndSettle();
 
       expect(find.byType(ListTile), findsNWidgets(2));
-      expect(find.text('Import 1 text'), findsOneWidget);
-      expect(find.text('Import 2 text'), findsOneWidget);
+      expect(find.text('Import 1 title'), findsOneWidget);
+      expect(find.text('Import 2 title'), findsOneWidget);
     });
 
     testWidgets('should display floating button', (WidgetTester tester) async {

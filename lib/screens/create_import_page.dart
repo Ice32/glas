@@ -36,7 +36,7 @@ class _CreateImportPageState extends State<CreateImportPage> {
         );
         navigateToImportsPage();
       } catch (ex) {
-        logger.e(ex.toString());
+        logger.w(ex.toString());
         scaffoldMessenger.showSnackBar(
           const SnackBar(content: Text('Unknown error occurred')),
         );

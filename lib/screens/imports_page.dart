@@ -47,10 +47,10 @@ class _ImportsPageState extends State<ImportsPage> {
                 itemCount: snapshot.data!.length,
                 itemBuilder: (context, index) => Card(
                     child: ListTile(
-                        title: Text(snapshot.data?[index].text ?? ''))));
+                        title: Text(snapshot.data?[index].title ?? ''))));
           }
           if (snapshot.hasError) {
-            logger.e(snapshot.error);
+            logger.w(snapshot.error);
             return ListView.builder(
               itemCount: 0,
               itemBuilder: (context, index) => const Card(),

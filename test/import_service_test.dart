@@ -67,8 +67,8 @@ void main() {
     group('List imports', () {
       test('should return imports', () async {
         List<ImportDTO> imports = [
-          ImportDTO(id: 1, text: 'first import'),
-          ImportDTO(id: 2, text: 'second import'),
+          ImportDTO(id: 1, title: 'first import', text: 'first import'),
+          ImportDTO(id: 2, title: 'second import', text: 'second import'),
         ];
         when(client.get('imports')).thenAnswer((realInvocation) =>
             Future.value(http.Response(jsonEncode(imports), 204)));

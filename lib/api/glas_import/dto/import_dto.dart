@@ -1,8 +1,10 @@
 class ImportDTO {
   final String text;
+  final String title;
   final int id;
 
   ImportDTO({
+    required this.title,
     required this.text,
     required this.id,
   });
@@ -10,12 +12,13 @@ class ImportDTO {
   factory ImportDTO.fromJson(Map<String, dynamic> json) {
     return ImportDTO(
       id: json['id'],
+      title: json['title'],
       text: json['text'],
     );
   }
 
   Map<String, dynamic> toJson() {
-    return <String, dynamic>{'id': id, 'text': text};
+    return <String, dynamic>{'id': id, 'title': title, 'text': text};
   }
 
   @override
