@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:glas_client/service/import/import_service.dart';
 import 'package:glas_client/shared/drawer_menu.dart';
+import 'package:logger/logger.dart';
 
 import '../api/glas_import/dto/import_dto.dart';
 import 'create_import_page.dart';
@@ -17,6 +18,7 @@ class ImportsPage extends StatefulWidget {
 
 class _ImportsPageState extends State<ImportsPage> {
   final importService = getIt.get<ImportService>();
+  final logger = Logger();
 
   @override
   void initState() {
@@ -48,7 +50,7 @@ class _ImportsPageState extends State<ImportsPage> {
                         title: Text(snapshot.data?[index].text ?? ''))));
           }
           if (snapshot.hasError) {
-            print(snapshot.error);
+            logger.e(snapshot.error);
             return ListView.builder(
               itemCount: 0,
               itemBuilder: (context, index) => const Card(),

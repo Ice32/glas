@@ -4,6 +4,7 @@ import 'package:glas_client/screens/imports_page.dart';
 import 'package:glas_client/service/import/import_service.dart';
 import 'package:glas_client/service/import/import_validator.dart';
 import 'package:glas_client/shared/drawer_menu.dart';
+import 'package:logger/logger.dart';
 
 class CreateImportPage extends StatefulWidget {
   const CreateImportPage({Key? key}) : super(key: key);
@@ -22,6 +23,7 @@ class _CreateImportPageState extends State<CreateImportPage> {
   final importTitleController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   final importService = GetIt.instance.get<ImportService>();
+  final logger = Logger();
 
   void submitPressed() async {
     if (_formKey.currentState!.validate()) {
@@ -34,7 +36,7 @@ class _CreateImportPageState extends State<CreateImportPage> {
         );
         navigateToImportsPage();
       } catch (ex) {
-        print(ex.toString());
+        logger.e(ex.toString());
         scaffoldMessenger.showSnackBar(
           const SnackBar(content: Text('Unknown error occurred')),
         );
