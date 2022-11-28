@@ -3,10 +3,11 @@
 // Do not manually edit this file.
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'dart:async' as _i4;
+import 'dart:async' as _i5;
 
-import 'package:glas_client/api/glas_http_client.dart' as _i3;
-import 'package:http/http.dart' as _i2;
+import 'package:glas_client/api/glas_http_client.dart' as _i4;
+import 'package:http/http.dart' as _i3;
+import 'package:logger/logger.dart' as _i2;
 import 'package:mockito/mockito.dart' as _i1;
 
 // ignore_for_file: type=lint
@@ -20,8 +21,18 @@ import 'package:mockito/mockito.dart' as _i1;
 // ignore_for_file: camel_case_types
 // ignore_for_file: subtype_of_sealed_class
 
-class _FakeResponse_0 extends _i1.SmartFake implements _i2.Response {
-  _FakeResponse_0(
+class _FakeLogger_0 extends _i1.SmartFake implements _i2.Logger {
+  _FakeLogger_0(
+    Object parent,
+    Invocation parentInvocation,
+  ) : super(
+          parent,
+          parentInvocation,
+        );
+}
+
+class _FakeResponse_1 extends _i1.SmartFake implements _i3.Response {
+  _FakeResponse_1(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -33,9 +44,22 @@ class _FakeResponse_0 extends _i1.SmartFake implements _i2.Response {
 /// A class which mocks [GlasHttpClient].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockGlasHttpClient extends _i1.Mock implements _i3.GlasHttpClient {
+class MockGlasHttpClient extends _i1.Mock implements _i4.GlasHttpClient {
   @override
-  _i4.Future<_i2.Response> post(
+  _i2.Logger get logger => (super.noSuchMethod(
+        Invocation.getter(#logger),
+        returnValue: _FakeLogger_0(
+          this,
+          Invocation.getter(#logger),
+        ),
+        returnValueForMissingStub: _FakeLogger_0(
+          this,
+          Invocation.getter(#logger),
+        ),
+      ) as _i2.Logger);
+
+  @override
+  _i5.Future<_i3.Response> post(
     String? path,
     Map<String, String>? body,
   ) =>
@@ -47,7 +71,7 @@ class MockGlasHttpClient extends _i1.Mock implements _i3.GlasHttpClient {
             body,
           ],
         ),
-        returnValue: _i4.Future<_i2.Response>.value(_FakeResponse_0(
+        returnValue: _i5.Future<_i3.Response>.value(_FakeResponse_1(
           this,
           Invocation.method(
             #post,
@@ -58,7 +82,7 @@ class MockGlasHttpClient extends _i1.Mock implements _i3.GlasHttpClient {
           ),
         )),
         returnValueForMissingStub:
-            _i4.Future<_i2.Response>.value(_FakeResponse_0(
+            _i5.Future<_i3.Response>.value(_FakeResponse_1(
           this,
           Invocation.method(
             #post,
@@ -68,28 +92,41 @@ class MockGlasHttpClient extends _i1.Mock implements _i3.GlasHttpClient {
             ],
           ),
         )),
-      ) as _i4.Future<_i2.Response>);
+      ) as _i5.Future<_i3.Response>);
 
   @override
-  _i4.Future<_i2.Response> get(String? path) => (super.noSuchMethod(
+  _i5.Future<_i3.Response> get(
+    String? path, [
+    Map<String, String>? params = const {},
+  ]) =>
+      (super.noSuchMethod(
         Invocation.method(
           #get,
-          [path],
+          [
+            path,
+            params,
+          ],
         ),
-        returnValue: _i4.Future<_i2.Response>.value(_FakeResponse_0(
+        returnValue: _i5.Future<_i3.Response>.value(_FakeResponse_1(
           this,
           Invocation.method(
             #get,
-            [path],
+            [
+              path,
+              params,
+            ],
           ),
         )),
         returnValueForMissingStub:
-            _i4.Future<_i2.Response>.value(_FakeResponse_0(
+            _i5.Future<_i3.Response>.value(_FakeResponse_1(
           this,
           Invocation.method(
             #get,
-            [path],
+            [
+              path,
+              params,
+            ],
           ),
         )),
-      ) as _i4.Future<_i2.Response>);
+      ) as _i5.Future<_i3.Response>);
 }

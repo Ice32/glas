@@ -19,4 +19,16 @@ class PhraseResponseDTO {
       translations: translationDTOs,
     );
   }
+
+  Map<String, dynamic> toJson() {
+    return <String, dynamic>{'phrase': phrase, 'translations': translations};
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is PhraseResponseDTO && phrase == other.phrase;
+  }
+
+  @override
+  int get hashCode => phrase.hashCode;
 }
