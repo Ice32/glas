@@ -14,6 +14,8 @@ class CreateImportPage extends StatefulWidget {
 }
 
 class _CreateImportPageState extends State<CreateImportPage> {
+  static const basePadding = 12.0;
+
   @override
   void initState() {
     super.initState();
@@ -62,18 +64,36 @@ class _CreateImportPageState extends State<CreateImportPage> {
             key: _formKey,
             child: Column(
               children: [
-                TextFormField(
-                  key: const Key('importTitleField'),
-                  controller: importTitleController,
-                  validator: ImportValidator.validateImportTitle,
+                Padding(
+                  padding: const EdgeInsets.all(basePadding),
+                  child: TextFormField(
+                    key: const Key('importTitleField'),
+                    autofocus: true,
+                    controller: importTitleController,
+                    validator: ImportValidator.validateImportTitle,
+                    decoration: const InputDecoration(
+                      labelText: 'Title',
+                      border: OutlineInputBorder(),
+                      floatingLabelBehavior: FloatingLabelBehavior.always,
+                    ),
+                  ),
                 ),
-                TextFormField(
-                  key: const Key('importTextField'),
-                  controller: importTextController,
-                  keyboardType: TextInputType.multiline,
-                  maxLines: null,
-                  minLines: 10,
-                  validator: ImportValidator.validateImportText,
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(
+                      basePadding, basePadding, basePadding, 8.0),
+                  child: TextFormField(
+                    key: const Key('importTextField'),
+                    controller: importTextController,
+                    keyboardType: TextInputType.multiline,
+                    maxLines: 10,
+                    minLines: 10,
+                    validator: ImportValidator.validateImportText,
+                    decoration: const InputDecoration(
+                      labelText: 'Text',
+                      border: OutlineInputBorder(),
+                      floatingLabelBehavior: FloatingLabelBehavior.always,
+                    ),
+                  ),
                 ),
                 ElevatedButton(
                     key: const Key('submitButton'),
