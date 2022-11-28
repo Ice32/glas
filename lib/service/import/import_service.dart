@@ -20,6 +20,11 @@ class ImportService {
 
   Future<List<ImportDTO>> getImports() async {
     final response = await httpClient.get('imports');
+
+    if (response.statusCode < 200 || response.statusCode >= 300) {
+      throw Exception('Failed to retrieve imports: ${response.statusCode}');
+    }
+
     final imports = jsonDecode(response.body) as List;
     return imports.map((i) => ImportDTO.fromJson(i)).toList();
   }
