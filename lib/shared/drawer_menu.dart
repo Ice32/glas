@@ -14,18 +14,17 @@ class DrawerMenu extends StatelessWidget {
 
   List<Widget> buildMenuItems(BuildContext context) {
     final List<String> items = [
-      "Import",
       "Dictionary",
       "Imports",
     ];
 
     final List<Widget> widgets = [];
     widgets.add(const DrawerHeader(
+      decoration: BoxDecoration(color: Colors.blue),
       child: Text(
         "Glas",
         style: TextStyle(color: Colors.white, fontSize: 28),
       ),
-      decoration: BoxDecoration(color: Colors.blue),
     ));
 
     for (var element in items) {
@@ -37,9 +36,6 @@ class DrawerMenu extends StatelessWidget {
         ),
         onTap: () {
           switch (element) {
-            case "Import":
-              screen = "/import";
-              break;
             case "Dictionary":
               screen = "/dictionary";
               break;

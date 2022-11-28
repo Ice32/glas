@@ -4,6 +4,7 @@ import 'package:glas_client/service/import/import_service.dart';
 import 'package:glas_client/shared/drawer_menu.dart';
 
 import '../api/glas_import/dto/import_dto.dart';
+import 'create_import_page.dart';
 
 final getIt = GetIt.instance;
 
@@ -20,6 +21,13 @@ class _ImportsPageState extends State<ImportsPage> {
   @override
   void initState() {
     super.initState();
+  }
+
+  void navigateToCreateImportPage() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const CreateImportPage()),
+    );
   }
 
   @override
@@ -41,6 +49,10 @@ class _ImportsPageState extends State<ImportsPage> {
                   child:
                       ListTile(title: Text(snapshot.data?[index].text ?? ''))));
         },
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: navigateToCreateImportPage,
+        child: const Icon(Icons.add),
       ),
     );
   }

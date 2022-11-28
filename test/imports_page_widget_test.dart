@@ -5,6 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
 import 'package:glas_client/api/glas_http_client.dart';
 import 'package:glas_client/api/glas_import/dto/import_dto.dart';
+import 'package:glas_client/screens/create_import_page.dart';
 import 'package:glas_client/screens/imports_page.dart';
 import 'package:glas_client/service/import/import_service.dart';
 import 'package:http/http.dart' as http;
@@ -62,6 +63,27 @@ void main() {
       expect(find.byType(ListTile), findsNWidgets(2));
       expect(find.text('Import 1 text'), findsOneWidget);
       expect(find.text('Import 2 text'), findsOneWidget);
+    });
+
+    testWidgets('should display floating button', (WidgetTester tester) async {
+      stubImportsResponse(httpClient, []);
+
+      await tester.pumpWidget(importsPage(importsPageScaffoldKey));
+      await tester.pumpAndSettle();
+
+      expect(find.byType(FloatingActionButton), findsOneWidget);
+    });
+
+    testWidgets('taping floating action button should open CreateImportPage',
+        (WidgetTester tester) async {
+      stubImportsResponse(httpClient, []);
+      await tester.pumpWidget(importsPage(importsPageScaffoldKey));
+      await tester.pumpAndSettle(); // TODO: try removing line
+
+      await tester.tap(find.byType(FloatingActionButton));
+      await tester.pumpAndSettle();
+
+      expect(find.byType(CreateImportPage), findsOneWidget);
     });
   });
 }
