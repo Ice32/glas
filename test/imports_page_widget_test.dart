@@ -6,6 +6,7 @@ import 'package:get_it/get_it.dart';
 import 'package:glas_client/api/glas_http_client.dart';
 import 'package:glas_client/api/glas_import/dto/import_dto.dart';
 import 'package:glas_client/screens/create_import_page.dart';
+import 'package:glas_client/screens/import_page.dart';
 import 'package:glas_client/screens/imports_page.dart';
 import 'package:glas_client/service/import/import_service.dart';
 import 'package:http/http.dart' as http;
@@ -78,12 +79,26 @@ void main() {
         (WidgetTester tester) async {
       stubImportsResponse(httpClient, []);
       await tester.pumpWidget(importsPage(importsPageScaffoldKey));
-      await tester.pumpAndSettle(); // TODO: try removing line
 
       await tester.tap(find.byType(FloatingActionButton));
       await tester.pumpAndSettle();
 
       expect(find.byType(CreateImportPage), findsOneWidget);
+    });
+
+    testWidgets('taping import list item should open ImportPage',
+        (WidgetTester tester) async {
+      stubImportsResponse(httpClient, [
+        ImportDTO(title: 'Import 1 title', text: 'Import 1 text', id: 1),
+        ImportDTO(title: 'Import 2 title', text: 'Import 2 text', id: 2)
+      ]);
+      await tester.pumpWidget(importsPage(importsPageScaffoldKey));
+      await tester.pump();
+
+      await tester.tap(find.text('Import 1 title'));
+      await tester.pumpAndSettle();
+
+      expect(find.byType(ImportPage), findsOneWidget);
     });
   });
 }

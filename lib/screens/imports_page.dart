@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:glas_client/screens/import_page.dart';
 import 'package:glas_client/service/import/import_service.dart';
 import 'package:glas_client/shared/drawer_menu.dart';
 import 'package:logger/logger.dart';
@@ -47,6 +48,16 @@ class _ImportsPageState extends State<ImportsPage> {
                 itemCount: snapshot.data!.length,
                 itemBuilder: (context, index) => Card(
                     child: ListTile(
+                        onTap: () {
+                          Navigator.push(context,
+                              MaterialPageRoute(builder: (context) {
+                            ImportDTO? data = snapshot.data?[index];
+                            if (data == null) {
+                              throw NullThrownError();
+                            }
+                            return ImportPage(data);
+                          }));
+                        },
                         title: Text(snapshot.data?[index].title ?? ''))));
           }
           if (snapshot.hasError) {
