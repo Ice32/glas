@@ -37,6 +37,22 @@ class _ImportsPageState extends State<ImportPage> {
   @override
   Widget build(BuildContext context) {
     var textStyle = Theme.of(context).textTheme.headlineLarge;
+    List<WidgetSpan> words = widget.importDTO.text
+        .split(' ')
+        .expand((word) => [
+              WidgetSpan(
+                  child: GestureDetector(
+                child: Text(word),
+                onTap: () {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('Tapped $word')),
+                  );
+                },
+              )),
+              WidgetSpan(child: Text(' '))
+            ])
+        .toList();
+    words.removeLast();
     return Scaffold(
         appBar: AppBar(
           title: const Text(
@@ -56,12 +72,8 @@ class _ImportsPageState extends State<ImportPage> {
             ),
             Padding(
               padding: const EdgeInsets.all(10),
-              child: RichText(
-                text: TextSpan(
-                    text: widget.importDTO.text,
-                    style: Theme.of(context).textTheme.bodyLarge),
-              ),
-            ),
+              child: RichText(text: TextSpan(children: words)),
+            )
           ],
         ));
   }

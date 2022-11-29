@@ -4,10 +4,9 @@ import 'package:http/http.dart';
 import 'package:logger/logger.dart';
 
 class GlasHttpClient {
-  static const host = "10.0.2.2";
-  static const port = "8080";
-  static const protocol = "http";
-  static const baseUrl = "$protocol://$host:$port";
+  static const host = "2a7a-77-238-217-37.eu.ngrok.io";
+  static const protocol = "https";
+  static const baseUrl = "$protocol://$host";
   final logger = Logger();
 
   Future<Response> post(String path, Map<String, String> body) {
@@ -17,7 +16,9 @@ class GlasHttpClient {
   }
 
   Future<Response> get(String path, [Map<String, String> params = const {}]) {
-    var uri = Uri.http("$host:$port", path, params);
+    var uri = protocol == 'http'
+        ? Uri.http(host, path, params)
+        : Uri.https(host, path, params);
     logger.d(uri);
     return Client().get(
       uri,

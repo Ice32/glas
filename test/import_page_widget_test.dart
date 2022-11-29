@@ -21,19 +21,25 @@ void main() {
   final importPageScaffoldKey = GlobalKey<ScaffoldState>();
 
   group('Import page widget test', () {
-    testWidgets('should render title and text', (WidgetTester tester) async {
+    testWidgets('should render title', (WidgetTester tester) async {
       final importDTO =
           ImportDTO(title: 'Import 1 title', text: 'Import 1 text', id: 1);
 
       await tester.pumpWidget(importPage(importPageScaffoldKey, importDTO));
-      await tester.pump();
 
       expect(find.text('Import 1 title'), findsOneWidget);
-      expect(
-          find.byWidgetPredicate((widget) =>
-              widget is RichText &&
-              widget.text.toPlainText() == 'Import 1 text'),
-          findsOneWidget);
+    });
+
+    testWidgets('should display each import text word as a separate span',
+        (WidgetTester tester) async {
+      final importDTO =
+          ImportDTO(title: 'Import 1 title', text: 'Import 1 text', id: 1);
+
+      await tester.pumpWidget(importPage(importPageScaffoldKey, importDTO));
+
+      expect(find.text('Import', findRichText: true), findsOneWidget);
+      expect(find.text('1', findRichText: true), findsOneWidget);
+      expect(find.text('text', findRichText: true), findsOneWidget);
     });
   });
 }
