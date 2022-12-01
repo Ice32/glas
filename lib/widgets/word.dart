@@ -2,18 +2,20 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:glas_client/service/dictionary/text_part.dart';
 import 'package:just_the_tooltip/just_the_tooltip.dart';
 import 'package:logger/logger.dart';
 
 import '../api/dictionary/dto/phrase_response_dto.dart';
 import '../service/dictionary/dictionary_service.dart';
+import '../service/dictionary/translatable_text_part.dart';
 
 final getIt = GetIt.instance;
 
 class Word extends StatefulWidget {
-  late final String word;
+  late final TextPart word;
 
-  Word(String data, {Key? key}) : super(key: key) {
+  Word(TextPart data, {Key? key}) : super(key: key) {
     word = data;
   }
 
@@ -34,7 +36,7 @@ class _WordState extends State<Word> {
   Widget build(BuildContext context) {
     return JustTheTooltip(
       onShow: () async => streamController
-          .add(await dictionaryService.getTranslations(widget.word)),
+          .add(await dictionaryService.getTranslations(widget.word.value)),
       controller: tooltipController,
       content: Padding(
           padding: const EdgeInsets.all(10),
@@ -59,8 +61,11 @@ class _WordState extends State<Word> {
           )),
       child: GestureDetector(
         child: Text(
-          widget.word,
-          style: Theme.of(context).textTheme.bodyLarge,
+          widget.word.value,
+          style: Theme.of(context).textTheme.bodyLarge?.merge(TextStyle(
+              backgroundColor: widget.word is TranslatableTextPart
+                  ? const Color(0xff9fcfff)
+                  : Theme.of(context).textTheme.bodyLarge?.backgroundColor)),
         ),
         onTap: () {
           tooltipController.showTooltip();

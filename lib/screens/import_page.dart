@@ -40,7 +40,7 @@ class _ImportsPageState extends State<ImportPage> {
   Widget build(BuildContext context) {
     var textStyle = Theme.of(context).textTheme.headlineLarge;
     List<WidgetSpan> words = TextSplitter.split(widget.importDTO.text)
-        .map((word) => WidgetSpan(child: Word(word.value)))
+        .map((word) => WidgetSpan(child: Word(word)))
         .toList();
 
     return Scaffold(
