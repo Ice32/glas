@@ -3,11 +3,13 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
+import 'package:glas_client/api/dictionary/dto/phrase_response_dto.dart';
 import 'package:glas_client/api/glas_http_client.dart';
 import 'package:glas_client/api/glas_import/dto/import_dto.dart';
 import 'package:glas_client/screens/create_import_page.dart';
 import 'package:glas_client/screens/import_page.dart';
 import 'package:glas_client/screens/imports_page.dart';
+import 'package:glas_client/service/dictionary/dictionary_service.dart';
 import 'package:glas_client/service/import/import_service.dart';
 import 'package:http/http.dart' as http;
 import 'package:mockito/annotations.dart';
@@ -44,6 +46,7 @@ void main() {
     var glasHttpClient = MockGlasHttpClient();
     getIt.registerSingleton<GlasHttpClient>(glasHttpClient);
     getIt.registerSingleton<ImportService>(ImportService());
+    getIt.registerSingleton<DictionaryService>(DictionaryService());
     httpClient = glasHttpClient;
   });
 
@@ -92,6 +95,12 @@ void main() {
         ImportDTO(title: 'Import 1 title', text: 'Import 1 text', id: 1),
         ImportDTO(title: 'Import 2 title', text: 'Import 2 text', id: 2)
       ]);
+      when(httpClient.get('translations', any)).thenAnswer((realInvocation) =>
+          Future.value(http.Response(
+              jsonEncode(
+                  PhraseResponseDTO(phrase: '', translations: []).toJson()),
+              200)));
+
       await tester.pumpWidget(importsPage(importsPageScaffoldKey));
       await tester.pump();
 

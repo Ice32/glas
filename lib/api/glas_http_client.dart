@@ -4,7 +4,7 @@ import 'package:http/http.dart';
 import 'package:logger/logger.dart';
 
 class GlasHttpClient {
-  static const host = "2a7a-77-238-217-37.eu.ngrok.io";
+  static const host = "23f3-77-238-217-37.eu.ngrok.io";
   static const protocol = "https";
   static const baseUrl = "$protocol://$host";
   final logger = Logger();

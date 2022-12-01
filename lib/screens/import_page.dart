@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:glas_client/service/dictionary/text_splitter.dart';
 import 'package:glas_client/shared/drawer_menu.dart';
+import 'package:glas_client/widgets/word.dart';
 import 'package:logger/logger.dart';
 
 import '../api/glas_import/dto/import_dto.dart';
@@ -37,22 +39,10 @@ class _ImportsPageState extends State<ImportPage> {
   @override
   Widget build(BuildContext context) {
     var textStyle = Theme.of(context).textTheme.headlineLarge;
-    List<WidgetSpan> words = widget.importDTO.text
-        .split(' ')
-        .expand((word) => [
-              WidgetSpan(
-                  child: GestureDetector(
-                child: Text(word),
-                onTap: () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('Tapped $word')),
-                  );
-                },
-              )),
-              WidgetSpan(child: Text(' '))
-            ])
+    List<WidgetSpan> words = TextSplitter.split(widget.importDTO.text)
+        .map((word) => WidgetSpan(child: Word(word.value)))
         .toList();
-    words.removeLast();
+
     return Scaffold(
         appBar: AppBar(
           title: const Text(
@@ -70,10 +60,11 @@ class _ImportsPageState extends State<ImportPage> {
                 style: textStyle,
               ),
             ),
-            Padding(
+            Expanded(
+                child: Padding(
               padding: const EdgeInsets.all(10),
               child: RichText(text: TextSpan(children: words)),
-            )
+            ))
           ],
         ));
   }
