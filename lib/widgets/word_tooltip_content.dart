@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:glas_client/service/import/known_words_service.dart';
 
 import '../api/dictionary/dto/phrase_response_dto.dart';
 
@@ -21,20 +22,20 @@ class WordTooltipContent extends StatefulWidget {
 
 class _WordTooltipContentState extends State<WordTooltipContent> {
   static const numTranslationsToShow = 5;
+  final knownWordsService = getIt.get<KnownWordsService>();
 
   @override
   Widget build(BuildContext context) {
+    var phraseResponse = widget.phraseResponseDTO;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
-        ...widget.phraseResponseDTO.translations
+        ...phraseResponse.translations
             .toSet()
             .toList()
-            .sublist(
-                0,
-                min(numTranslationsToShow,
-                    widget.phraseResponseDTO.translations.length))
+            .sublist(0,
+                min(numTranslationsToShow, phraseResponse.translations.length))
             .mapIndexed((i, t) => Text("${i + 1}: ${t.translation}")),
         Row(
           children: [
@@ -51,7 +52,8 @@ class _WordTooltipContentState extends State<WordTooltipContent> {
                   color: Color(0xffffd517),
                 ),
                 key: const Key('iKnowThisWordButton'),
-                onPressed: () {},
+                onPressed: () =>
+                    knownWordsService.createKnownWord(phraseResponse.phrase),
                 label: const Text("I know this word")),
           ],
         )

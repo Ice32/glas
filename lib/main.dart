@@ -6,6 +6,7 @@ import 'package:glas_client/screens/dictionary_page.dart';
 import 'package:glas_client/screens/imports_page.dart';
 import 'package:glas_client/service/dictionary/dictionary_service.dart';
 import 'package:glas_client/service/import/import_service.dart';
+import 'package:glas_client/service/import/known_words_service.dart';
 
 final getIt = GetIt.instance;
 
@@ -13,6 +14,7 @@ void main() {
   getIt.registerSingleton<GlasHttpClient>(GlasHttpClient());
   getIt.registerSingleton<ImportService>(ImportService());
   getIt.registerSingleton<DictionaryService>(DictionaryService());
+  getIt.registerSingleton<KnownWordsService>(KnownWordsService());
   runApp(const MyApp());
 }
 

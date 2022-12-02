@@ -8,6 +8,7 @@ import 'package:glas_client/api/glas_http_client.dart';
 import 'package:glas_client/api/glas_import/dto/import_dto.dart';
 import 'package:glas_client/screens/import_page.dart';
 import 'package:glas_client/service/dictionary/dictionary_service.dart';
+import 'package:glas_client/service/import/known_words_service.dart';
 import 'package:http/http.dart' as http;
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
@@ -47,6 +48,7 @@ void main() {
     var glasHttpClient = MockGlasHttpClient();
     getIt.registerSingleton<GlasHttpClient>(glasHttpClient);
     getIt.registerSingleton<DictionaryService>(DictionaryService());
+    getIt.registerSingleton<KnownWordsService>(KnownWordsService());
     httpClient = glasHttpClient;
   });
 
@@ -157,5 +159,24 @@ void main() {
     expect(find.textContaining('text translation 4'), findsOneWidget);
     expect(find.textContaining('text translation 5'), findsOneWidget);
     expect(find.textContaining('text translation 6'), findsNothing);
+  });
+
+  testWidgets("tapping on 'I know this word' calls API",
+      (WidgetTester tester) async {
+    const word = 'aWord';
+    stubTranslationsResponse(httpClient, word,
+        [TranslationDTO(translation: 'text translation', source: word)]);
+    when(httpClient.post('known-words', any))
+        .thenAnswer((realInvocation) => Future.value(http.Response('', 204)));
+    final importDTO =
+        ImportDTO(title: 'Import 1 title', text: 'Import 1 $word', id: 1);
+    await tester.pumpWidget(importPage(importPageScaffoldKey, importDTO));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text(word));
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('I know this word'));
+
+    verify(httpClient.post('known-words', {'text': word}));
   });
 }

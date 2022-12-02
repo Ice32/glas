@@ -40,6 +40,7 @@ class _WordState extends State<Word> {
       onShow: () async => streamController
           .add(await dictionaryService.getTranslations(widget.word.value)),
       controller: tooltipController,
+      isModal: true,
       content: Padding(
           padding: const EdgeInsets.all(10),
           child: StreamBuilder<PhraseResponseDTO>(
