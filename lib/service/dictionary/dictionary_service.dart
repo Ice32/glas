@@ -2,8 +2,8 @@ import 'dart:convert';
 
 import 'package:get_it/get_it.dart';
 import 'package:glas_client/api/dictionary/dto/phrase_response_dto.dart';
-import 'package:glas_client/service/dictionary/text_part.dart';
-import 'package:glas_client/service/dictionary/text_splitter.dart';
+import 'package:glas_client/service/import/text_part.dart';
+import 'package:glas_client/service/import/text_splitter.dart';
 
 import '../../api/glas_http_client.dart';
 

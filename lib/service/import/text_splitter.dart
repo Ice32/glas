@@ -1,5 +1,5 @@
-import 'package:glas_client/service/dictionary/text_part.dart';
-import 'package:glas_client/service/dictionary/translatable_text_part.dart';
+import 'package:glas_client/service/import/text_part.dart';
+import 'package:glas_client/service/import/translatable_text_part.dart';
 
 class TextSplitter {
   static final RegExp _textPartsRegex = RegExp(

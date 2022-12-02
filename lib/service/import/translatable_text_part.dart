@@ -1,4 +1,4 @@
-import 'package:glas_client/service/dictionary/text_part.dart';
+import 'package:glas_client/service/import/text_part.dart';
 
 class TranslatableTextPart extends TextPart {
   TranslatableTextPart(String value) : super(value);

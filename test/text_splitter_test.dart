@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:glas_client/service/dictionary/text_part.dart';
-import 'package:glas_client/service/dictionary/text_splitter.dart';
-import 'package:glas_client/service/dictionary/translatable_text_part.dart';
+import 'package:glas_client/service/import/text_part.dart';
+import 'package:glas_client/service/import/text_splitter.dart';
+import 'package:glas_client/service/import/translatable_text_part.dart';
 
 void main() {
   group('Text splitter', () {

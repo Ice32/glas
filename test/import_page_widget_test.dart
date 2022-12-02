@@ -100,7 +100,62 @@ void main() {
       await tester.tap(find.text('text'));
       await tester.pumpAndSettle();
 
-      expect(find.text('text translation'), findsOneWidget);
+      expect(find.textContaining('text translation'), findsOneWidget);
+      expect(find.text('I know this word'), findsOneWidget);
     });
+
+    testWidgets('should show 5 translations', (WidgetTester tester) async {
+      stubTranslationsResponse(httpClient, 'text', [
+        TranslationDTO(translation: 'text translation 1', source: 'text'),
+        TranslationDTO(translation: 'text translation 2', source: 'text'),
+        TranslationDTO(translation: 'text translation 3', source: 'text'),
+        TranslationDTO(translation: 'text translation 4', source: 'text'),
+        TranslationDTO(translation: 'text translation 5', source: 'text'),
+        TranslationDTO(translation: 'text translation 6', source: 'text'),
+      ]);
+      final importDTO =
+          ImportDTO(title: 'Import 1 title', text: 'Import 1 text', id: 1);
+
+      await tester.pumpWidget(importPage(importPageScaffoldKey, importDTO));
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.text('text'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('1: text translation 1'), findsOneWidget);
+      expect(find.text('2: text translation 2'), findsOneWidget);
+      expect(find.text('3: text translation 3'), findsOneWidget);
+      expect(find.text('4: text translation 4'), findsOneWidget);
+      expect(find.text('5: text translation 5'), findsOneWidget);
+      expect(find.text('6: text translation 6'), findsNothing);
+    });
+  });
+
+  testWidgets('should hide translations with duplicate text',
+      (WidgetTester tester) async {
+    stubTranslationsResponse(httpClient, 'text', [
+      TranslationDTO(translation: 'text translation 1', source: 'text'),
+      TranslationDTO(translation: 'text translation 2', source: 'text 1'),
+      TranslationDTO(translation: 'text translation 2', source: 'text 2'),
+      TranslationDTO(translation: 'text translation 3', source: 'text'),
+      TranslationDTO(translation: 'text translation 4', source: 'text'),
+      TranslationDTO(translation: 'text translation 5', source: 'text'),
+      TranslationDTO(translation: 'text translation 6', source: 'text'),
+    ]);
+    final importDTO =
+        ImportDTO(title: 'Import 1 title', text: 'Import 1 text', id: 1);
+
+    await tester.pumpWidget(importPage(importPageScaffoldKey, importDTO));
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('text'));
+    await tester.pumpAndSettle();
+
+    expect(find.textContaining('text translation 1'), findsOneWidget);
+    expect(find.textContaining('text translation 2'), findsOneWidget);
+    expect(find.textContaining('text translation 3'), findsOneWidget);
+    expect(find.textContaining('text translation 4'), findsOneWidget);
+    expect(find.textContaining('text translation 5'), findsOneWidget);
+    expect(find.textContaining('text translation 6'), findsNothing);
   });
 }

@@ -17,4 +17,14 @@ class TranslationDTO {
   Map<String, dynamic> toJson() {
     return <String, dynamic>{'translation': translation, 'source': source};
   }
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is TranslationDTO &&
+          runtimeType == other.runtimeType &&
+          translation == other.translation;
+
+  @override
+  int get hashCode => translation.hashCode;
 }
