@@ -10,7 +10,7 @@ import 'package:http/http.dart' as http;
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 
-import 'import_service_test.mocks.dart';
+import 'dictionary_service_test.mocks.dart';
 
 final getIt = GetIt.instance;
 

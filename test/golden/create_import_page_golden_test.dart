@@ -8,7 +8,7 @@ import 'package:http/http.dart' as http;
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 
-import '../create_import_page_widget_test.mocks.dart';
+import 'create_import_page_golden_test.mocks.dart';
 
 final getIt = GetIt.instance;
 
