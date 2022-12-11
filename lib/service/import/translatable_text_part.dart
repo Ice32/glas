@@ -7,7 +7,9 @@ class TranslatableTextPart extends TextPart {
 
   @override
   bool operator ==(Object other) {
-    return other is TranslatableTextPart && value == other.value;
+    return other is TranslatableTextPart &&
+        other.runtimeType == TranslatableTextPart &&
+        value == other.value;
   }
 
   @override

@@ -8,7 +8,9 @@ class TextPart {
 
   @override
   bool operator ==(Object other) {
-    return other is TextPart && value == other.value;
+    return other is TextPart &&
+        other.runtimeType == TextPart &&
+        value == other.value;
   }
 
   @override

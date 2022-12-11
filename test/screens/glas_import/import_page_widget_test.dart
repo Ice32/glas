@@ -2,10 +2,12 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:get_it/get_it.dart';
 import 'package:glas_client/api/dictionary/dto/phrase_response_dto.dart';
 import 'package:glas_client/api/dictionary/dto/translation_dto.dart';
 import 'package:glas_client/api/glas_http_client.dart';
 import 'package:glas_client/api/glas_import/dto/import_dto.dart';
+import 'package:glas_client/api/glas_import/dto/known_word_dto.dart';
 import 'package:glas_client/screens/import_page.dart';
 import 'package:glas_client/service/dictionary/dictionary_service.dart';
 import 'package:glas_client/service/import/known_words_service.dart';
@@ -24,6 +26,14 @@ void stubTranslationsResponse(MockGlasHttpClient httpClient, String phrase,
           200)));
 }
 
+void stubKnownWordsResponse(
+    MockGlasHttpClient httpClient, List<KnownWordDTO> knownWords) {
+  when((GetIt.instance.get<GlasHttpClient>() as MockGlasHttpClient)
+          .get('known-words', any))
+      .thenAnswer((realInvocation) =>
+          Future.value(http.Response(jsonEncode(knownWords), 200)));
+}
+
 MaterialApp importPage(
     GlobalKey<ScaffoldState> importPageScaffoldKey, ImportDTO importDTO) {
   return MaterialApp(
@@ -40,60 +50,55 @@ MaterialApp importPage(
 
 @GenerateNiceMocks([MockSpec<GlasHttpClient>()])
 void main() {
-  final importPageScaffoldKey = GlobalKey<ScaffoldState>();
-
-  late MockGlasHttpClient httpClient;
-
-  setUp(() {
-    var glasHttpClient = MockGlasHttpClient();
-    getIt.registerSingleton<GlasHttpClient>(glasHttpClient);
-    getIt.registerSingleton<DictionaryService>(DictionaryService());
-    getIt.registerSingleton<KnownWordsService>(KnownWordsService());
-    httpClient = glasHttpClient;
-  });
-
-  tearDown(() {
-    getIt.reset();
-  });
-
   group('Import page widget test', () {
+    final getIt = GetIt.instance;
+    final importPageScaffoldKey = GlobalKey<ScaffoldState>();
+
+    final httpClient = MockGlasHttpClient();
+
+    setUp(() async {
+      getIt.registerSingleton<GlasHttpClient>(httpClient);
+      getIt.registerSingleton<DictionaryService>(DictionaryService());
+      getIt.registerSingleton<KnownWordsService>(KnownWordsService());
+    });
+
+    tearDown(() async {
+      await getIt.reset();
+      reset(httpClient);
+    });
+
     testWidgets('should render title', (WidgetTester tester) async {
-      final importDTO =
+      stubKnownWordsResponse(httpClient, []);
+      const importDTO =
           ImportDTO(title: 'Import 1 title', text: 'Import 1 text', id: 1);
 
       await tester.pumpWidget(importPage(importPageScaffoldKey, importDTO));
+      await tester.pumpAndSettle();
 
       expect(find.text('Import 1 title'), findsOneWidget);
     });
 
     testWidgets('should display each import text word as a separate span',
         (WidgetTester tester) async {
-      final importDTO =
+      stubKnownWordsResponse(httpClient, []);
+      const importDTO =
           ImportDTO(title: 'Import 1 title', text: 'Import 1 text', id: 1);
 
       await tester.pumpWidget(importPage(importPageScaffoldKey, importDTO));
+      await tester.pumpAndSettle();
 
       expect(find.text('Import', findRichText: true), findsOneWidget);
       expect(find.text('1', findRichText: true), findsOneWidget);
       expect(find.text('text', findRichText: true), findsOneWidget);
     });
 
-    testWidgets('opening import page sends no http requests',
-        (WidgetTester tester) async {
-      final importDTO =
-          ImportDTO(title: 'Import 1 title', text: 'Import 1 text', id: 1);
-
-      await tester.pumpWidget(importPage(importPageScaffoldKey, importDTO));
-      await tester.pumpAndSettle();
-
-      verifyNoMoreInteractions(httpClient);
-    });
-
     testWidgets('tapping on a word shows translation',
         (WidgetTester tester) async {
-      stubTranslationsResponse(httpClient, 'text',
-          [TranslationDTO(translation: 'text translation', source: 'text')]);
-      final importDTO =
+      stubKnownWordsResponse(httpClient, []);
+      stubTranslationsResponse(httpClient, 'text', [
+        const TranslationDTO(translation: 'text translation', source: 'text')
+      ]);
+      const importDTO =
           ImportDTO(title: 'Import 1 title', text: 'Import 1 text', id: 1);
 
       await tester.pumpWidget(importPage(importPageScaffoldKey, importDTO));
@@ -107,15 +112,16 @@ void main() {
     });
 
     testWidgets('should show 5 translations', (WidgetTester tester) async {
+      stubKnownWordsResponse(httpClient, []);
       stubTranslationsResponse(httpClient, 'text', [
-        TranslationDTO(translation: 'text translation 1', source: 'text'),
-        TranslationDTO(translation: 'text translation 2', source: 'text'),
-        TranslationDTO(translation: 'text translation 3', source: 'text'),
-        TranslationDTO(translation: 'text translation 4', source: 'text'),
-        TranslationDTO(translation: 'text translation 5', source: 'text'),
-        TranslationDTO(translation: 'text translation 6', source: 'text'),
+        const TranslationDTO(translation: 'text translation 1', source: 'text'),
+        const TranslationDTO(translation: 'text translation 2', source: 'text'),
+        const TranslationDTO(translation: 'text translation 3', source: 'text'),
+        const TranslationDTO(translation: 'text translation 4', source: 'text'),
+        const TranslationDTO(translation: 'text translation 5', source: 'text'),
+        const TranslationDTO(translation: 'text translation 6', source: 'text'),
       ]);
-      final importDTO =
+      const importDTO =
           ImportDTO(title: 'Import 1 title', text: 'Import 1 text', id: 1);
 
       await tester.pumpWidget(importPage(importPageScaffoldKey, importDTO));
@@ -131,52 +137,92 @@ void main() {
       expect(find.text('5: text translation 5'), findsOneWidget);
       expect(find.text('6: text translation 6'), findsNothing);
     });
-  });
 
-  testWidgets('should hide translations with duplicate text',
-      (WidgetTester tester) async {
-    stubTranslationsResponse(httpClient, 'text', [
-      TranslationDTO(translation: 'text translation 1', source: 'text'),
-      TranslationDTO(translation: 'text translation 2', source: 'text 1'),
-      TranslationDTO(translation: 'text translation 2', source: 'text 2'),
-      TranslationDTO(translation: 'text translation 3', source: 'text'),
-      TranslationDTO(translation: 'text translation 4', source: 'text'),
-      TranslationDTO(translation: 'text translation 5', source: 'text'),
-      TranslationDTO(translation: 'text translation 6', source: 'text'),
-    ]);
-    final importDTO =
-        ImportDTO(title: 'Import 1 title', text: 'Import 1 text', id: 1);
+    testWidgets('should hide translations with duplicate text',
+        (WidgetTester tester) async {
+      stubKnownWordsResponse(httpClient, []);
+      stubTranslationsResponse(httpClient, 'text', [
+        const TranslationDTO(translation: 'text translation 1', source: 'text'),
+        const TranslationDTO(
+            translation: 'text translation 2', source: 'text 1'),
+        const TranslationDTO(
+            translation: 'text translation 2', source: 'text 2'),
+        const TranslationDTO(translation: 'text translation 3', source: 'text'),
+        const TranslationDTO(translation: 'text translation 4', source: 'text'),
+        const TranslationDTO(translation: 'text translation 5', source: 'text'),
+        const TranslationDTO(translation: 'text translation 6', source: 'text'),
+      ]);
+      const importDTO =
+          ImportDTO(title: 'Import 1 title', text: 'Import 1 text', id: 1);
 
-    await tester.pumpWidget(importPage(importPageScaffoldKey, importDTO));
-    await tester.pumpAndSettle();
+      await tester.pumpWidget(importPage(importPageScaffoldKey, importDTO));
+      await tester.pumpAndSettle();
 
-    await tester.tap(find.text('text'));
-    await tester.pumpAndSettle();
+      await tester.tap(find.text('text'));
+      await tester.pumpAndSettle();
 
-    expect(find.textContaining('text translation 1'), findsOneWidget);
-    expect(find.textContaining('text translation 2'), findsOneWidget);
-    expect(find.textContaining('text translation 3'), findsOneWidget);
-    expect(find.textContaining('text translation 4'), findsOneWidget);
-    expect(find.textContaining('text translation 5'), findsOneWidget);
-    expect(find.textContaining('text translation 6'), findsNothing);
-  });
+      expect(find.textContaining('text translation 1'), findsOneWidget);
+      expect(find.textContaining('text translation 2'), findsOneWidget);
+      expect(find.textContaining('text translation 3'), findsOneWidget);
+      expect(find.textContaining('text translation 4'), findsOneWidget);
+      expect(find.textContaining('text translation 5'), findsOneWidget);
+      expect(find.textContaining('text translation 6'), findsNothing);
+    });
 
-  testWidgets("tapping on 'I know this word' calls API",
-      (WidgetTester tester) async {
-    const word = 'aWord';
-    stubTranslationsResponse(httpClient, word,
-        [TranslationDTO(translation: 'text translation', source: word)]);
-    when(httpClient.post('known-words', any))
-        .thenAnswer((realInvocation) => Future.value(http.Response('', 204)));
-    final importDTO =
-        ImportDTO(title: 'Import 1 title', text: 'Import 1 $word', id: 1);
-    await tester.pumpWidget(importPage(importPageScaffoldKey, importDTO));
-    await tester.pumpAndSettle();
-    await tester.tap(find.text(word));
-    await tester.pumpAndSettle();
+    testWidgets("tapping on 'I know this word' calls API",
+        (WidgetTester tester) async {
+      const word = 'aWord';
+      stubKnownWordsResponse(httpClient, []);
+      when(httpClient.post('known-words', any))
+          .thenAnswer((realInvocation) => Future.value(http.Response('', 204)));
+      stubTranslationsResponse(httpClient, word, [
+        const TranslationDTO(translation: 'text translation', source: word)
+      ]);
+      const importDTO =
+          ImportDTO(title: 'Import 1 title', text: 'Import 1 $word', id: 1);
+      await tester.pumpWidget(importPage(importPageScaffoldKey, importDTO));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text(word));
+      await tester.pumpAndSettle();
 
-    await tester.tap(find.text('I know this word'));
+      await tester.tap(find.text('I know this word'));
 
-    verify(httpClient.post('known-words', {'text': word}));
+      verify(httpClient.post('known-words', {'text': word}));
+    });
+
+    testWidgets('should display untranslatable text parts without background',
+        (WidgetTester tester) async {
+      stubKnownWordsResponse(httpClient, []);
+      const importDTO =
+          ImportDTO(title: 'Import 1 title', text: 'Import 1 text.', id: 1);
+
+      await tester.pumpWidget(importPage(importPageScaffoldKey, importDTO));
+      await tester.pumpAndSettle();
+
+      expect(
+          (tester.firstWidget(find.text('.', findRichText: true)) as RichText)
+              .text
+              .style
+              ?.backgroundColor,
+          null);
+    });
+
+    testWidgets('should display known words without a background color',
+        (WidgetTester tester) async {
+      stubKnownWordsResponse(httpClient, [KnownWordDTO(id: 1, text: 'text')]);
+      const importDTO =
+          ImportDTO(title: 'Import 1 title', text: 'Import 1 text', id: 1);
+
+      await tester.pumpWidget(importPage(importPageScaffoldKey, importDTO));
+      await tester.pumpAndSettle();
+
+      expect(
+          (tester.firstWidget(find.text('text', findRichText: true))
+                  as RichText)
+              .text
+              .style
+              ?.backgroundColor,
+          null);
+    });
   });
 }

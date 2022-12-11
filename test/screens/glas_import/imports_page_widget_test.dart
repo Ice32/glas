@@ -6,11 +6,13 @@ import 'package:get_it/get_it.dart';
 import 'package:glas_client/api/dictionary/dto/phrase_response_dto.dart';
 import 'package:glas_client/api/glas_http_client.dart';
 import 'package:glas_client/api/glas_import/dto/import_dto.dart';
+import 'package:glas_client/api/glas_import/dto/known_word_dto.dart';
 import 'package:glas_client/screens/create_import_page.dart';
 import 'package:glas_client/screens/import_page.dart';
 import 'package:glas_client/screens/imports_page.dart';
 import 'package:glas_client/service/dictionary/dictionary_service.dart';
 import 'package:glas_client/service/import/import_service.dart';
+import 'package:glas_client/service/import/known_words_service.dart';
 import 'package:http/http.dart' as http;
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
@@ -37,6 +39,12 @@ void stubImportsResponse(
       Future.value(http.Response(jsonEncode(imports), 200)));
 }
 
+void stubKnownWordsResponse(
+    MockGlasHttpClient httpClient, List<KnownWordDTO> knownWords) {
+  when(httpClient.get('known-words', any)).thenAnswer((realInvocation) =>
+      Future.value(http.Response(jsonEncode(knownWords), 200)));
+}
+
 @GenerateNiceMocks([MockSpec<GlasHttpClient>()])
 void main() {
   final importsPageScaffoldKey = GlobalKey<ScaffoldState>();
@@ -47,6 +55,7 @@ void main() {
     getIt.registerSingleton<GlasHttpClient>(glasHttpClient);
     getIt.registerSingleton<ImportService>(ImportService());
     getIt.registerSingleton<DictionaryService>(DictionaryService());
+    getIt.registerSingleton<KnownWordsService>(KnownWordsService());
     httpClient = glasHttpClient;
   });
 
@@ -57,8 +66,8 @@ void main() {
   group('Imports page widget test', () {
     testWidgets('should render imports', (WidgetTester tester) async {
       stubImportsResponse(httpClient, [
-        ImportDTO(title: 'Import 1 title', text: 'Import 1 text', id: 1),
-        ImportDTO(title: 'Import 2 title', text: 'Import 2 text', id: 2)
+        const ImportDTO(title: 'Import 1 title', text: 'Import 1 text', id: 1),
+        const ImportDTO(title: 'Import 2 title', text: 'Import 2 text', id: 2)
       ]);
 
       await tester.pumpWidget(importsPage(importsPageScaffoldKey));
@@ -92,14 +101,15 @@ void main() {
     testWidgets('taping import list item should open ImportPage',
         (WidgetTester tester) async {
       stubImportsResponse(httpClient, [
-        ImportDTO(title: 'Import 1 title', text: 'Import 1 text', id: 1),
-        ImportDTO(title: 'Import 2 title', text: 'Import 2 text', id: 2)
+        const ImportDTO(title: 'Import 1 title', text: 'Import 1 text', id: 1),
+        const ImportDTO(title: 'Import 2 title', text: 'Import 2 text', id: 2)
       ]);
       when(httpClient.get('translations', any)).thenAnswer((realInvocation) =>
           Future.value(http.Response(
-              jsonEncode(
-                  PhraseResponseDTO(phrase: '', translations: []).toJson()),
+              jsonEncode(const PhraseResponseDTO(phrase: '', translations: [])
+                  .toJson()),
               200)));
+      stubKnownWordsResponse(httpClient, []);
 
       await tester.pumpWidget(importsPage(importsPageScaffoldKey));
       await tester.pump();

@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
 import 'package:glas_client/api/glas_http_client.dart';
+import 'package:glas_client/api/glas_import/dto/known_word_dto.dart';
 import 'package:glas_client/service/import/known_words_service.dart';
 import 'package:http/http.dart' as http;
 import 'package:mockito/annotations.dart';
@@ -55,6 +58,37 @@ void main() {
 
         expect(() async => KnownWordsService().createKnownWord('aWord'),
             throwsException);
+      });
+    });
+
+    group('Get known words', () {
+      test('should return imports', () async {
+        List<KnownWordDTO> knownWords = [
+          KnownWordDTO(id: 1, text: 'first word'),
+          KnownWordDTO(id: 2, text: 'second word'),
+        ];
+        when(client.get('known-words')).thenAnswer((realInvocation) =>
+            Future.value(http.Response(jsonEncode(knownWords), 200)));
+
+        var actual = await KnownWordsService().getKnownWords();
+
+        expect(actual, equals(knownWords));
+      });
+
+      test('should throw exception if response status less than 200', () async {
+        when(client.get('known-words')).thenAnswer(
+            (realInvocation) => Future.value(http.Response('', 199)));
+
+        expect(
+            () async => KnownWordsService().getKnownWords(), throwsException);
+      });
+
+      test('should throw exception if response status > 299', () async {
+        when(client.get('known-words')).thenAnswer(
+            (realInvocation) => Future.value(http.Response('', 300)));
+
+        expect(
+            () async => KnownWordsService().getKnownWords(), throwsException);
       });
     });
   });

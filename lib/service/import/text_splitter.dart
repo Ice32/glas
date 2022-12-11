@@ -7,7 +7,7 @@ class TextSplitter {
   static final RegExp _textPartsRegex = RegExp(
       r"((?<![\wäöüÄÖÜß'-])(?=[\wäöüÄÖÜß'-])|(?<=[\wäöüÄÖÜß'-])(?![\wäöüÄÖÜß'-]))",
       unicode: true);
-  static final RegExp _wordRegex = RegExp(r"[\wäöüÄÖÜß'-]+", unicode: true);
+  static final RegExp _wordRegex = RegExp(r"[A-Za-zäöüÄÖÜß'-]+", unicode: true);
 
   static List<TextPart> split(String text) {
     return text

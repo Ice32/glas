@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:glas_client/service/import/text_part.dart';
+import 'package:glas_client/service/import/word.dart';
 import 'package:glas_client/widgets/word_tooltip_content.dart';
 import 'package:just_the_tooltip/just_the_tooltip.dart';
 import 'package:logger/logger.dart';
@@ -13,18 +14,18 @@ import '../service/import/translatable_text_part.dart';
 
 final getIt = GetIt.instance;
 
-class Word extends StatefulWidget {
+class TextWord extends StatefulWidget {
   late final TextPart word;
 
-  Word(TextPart data, {Key? key}) : super(key: key) {
+  TextWord(TextPart data, {Key? key}) : super(key: key) {
     word = data;
   }
 
   @override
-  State<Word> createState() => _WordState();
+  State<TextWord> createState() => _TextWordState();
 }
 
-class _WordState extends State<Word> {
+class _TextWordState extends State<TextWord> {
   final dictionaryService = getIt.get<DictionaryService>();
 
   final tooltipController = JustTheController();
@@ -66,9 +67,10 @@ class _WordState extends State<Word> {
         child: Text(
           widget.word.value,
           style: themeData.textTheme.bodyLarge?.merge(TextStyle(
-              backgroundColor: widget.word is TranslatableTextPart
-                  ? const Color(0xff9fcfff)
-                  : themeData.textTheme.bodyLarge?.backgroundColor)),
+              backgroundColor:
+                  widget.word is TranslatableTextPart && widget.word is! Word
+                      ? const Color(0xff9fcfff)
+                      : themeData.textTheme.bodyLarge?.backgroundColor)),
         ),
         onTap: () {
           tooltipController.showTooltip();

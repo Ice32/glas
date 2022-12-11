@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:get_it/get_it.dart';
-import 'package:glas_client/service/import/text_splitter.dart';
+import 'package:glas_client/service/import/text_extractor.dart';
+import 'package:glas_client/service/import/text_part.dart';
 import 'package:glas_client/shared/drawer_menu.dart';
-import 'package:glas_client/widgets/word.dart';
+import 'package:glas_client/widgets/text_word.dart';
 import 'package:logger/logger.dart';
 
 import '../api/glas_import/dto/import_dto.dart';
 import 'create_import_page.dart';
-
-final getIt = GetIt.instance;
 
 class ImportPage extends StatefulWidget {
   late final ImportDTO importDTO;
@@ -39,9 +37,6 @@ class _ImportsPageState extends State<ImportPage> {
   @override
   Widget build(BuildContext context) {
     var textStyle = Theme.of(context).textTheme.headlineLarge;
-    List<WidgetSpan> words = TextSplitter.split(widget.importDTO.text)
-        .map((word) => WidgetSpan(child: Word(word)))
-        .toList();
 
     return Scaffold(
         appBar: AppBar(
@@ -63,7 +58,21 @@ class _ImportsPageState extends State<ImportPage> {
             Expanded(
                 child: Padding(
               padding: const EdgeInsets.all(10),
-              child: RichText(text: TextSpan(children: words)),
+              child: FutureBuilder<List<TextPart>>(
+                  future: TextExtractor.extract(widget.importDTO.text),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      return RichText(
+                          text: TextSpan(
+                              children: snapshot.data!
+                                  .map((w) => WidgetSpan(child: TextWord(w)))
+                                  .toList()));
+                    }
+                    if (snapshot.hasError) {
+                      logger.e(snapshot.error!.toString());
+                    }
+                    return const Text('Loading...');
+                  }),
             ))
           ],
         ));
