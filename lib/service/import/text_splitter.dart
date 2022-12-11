@@ -1,6 +1,8 @@
 import 'package:glas_client/service/import/text_part.dart';
 import 'package:glas_client/service/import/translatable_text_part.dart';
+import 'package:meta/meta.dart';
 
+@immutable
 class TextSplitter {
   static final RegExp _textPartsRegex = RegExp(
       r"((?<![\wäöüÄÖÜß'-])(?=[\wäöüÄÖÜß'-])|(?<=[\wäöüÄÖÜß'-])(?![\wäöüÄÖÜß'-]))",

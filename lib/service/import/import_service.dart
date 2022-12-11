@@ -1,11 +1,13 @@
 import 'dart:convert';
 
 import 'package:get_it/get_it.dart';
+import 'package:meta/meta.dart';
 
 import '../../api/glas_http_client.dart';
 import '../../api/glas_import/dto/create_import_dto.dart';
 import '../../api/glas_import/dto/import_dto.dart';
 
+@immutable
 class ImportService {
   final GlasHttpClient httpClient = GetIt.instance.get<GlasHttpClient>();
 

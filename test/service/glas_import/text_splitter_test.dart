@@ -6,50 +6,52 @@ import 'package:glas_client/service/import/translatable_text_part.dart';
 void main() {
   group('Text splitter', () {
     group('Split', () {
-      testWidgets('should split words on space', (WidgetTester tester) async {
+      test('should split words on space', () {
         expect(TextSplitter.split('first second'), [
-          TranslatableTextPart('first'),
-          TextPart(' '),
-          TranslatableTextPart('second')
+          const TranslatableTextPart('first'),
+          const TextPart(' '),
+          const TranslatableTextPart('second')
         ]);
       });
-      testWidgets('should split words on newline', (WidgetTester tester) async {
+      test('should split words on newline', () {
         expect(TextSplitter.split('first\nsecond'), [
-          TranslatableTextPart('first'),
-          TextPart('\n'),
-          TranslatableTextPart('second')
+          const TranslatableTextPart('first'),
+          const TextPart('\n'),
+          const TranslatableTextPart('second')
         ]);
       });
-      testWidgets('should split words on comma', (WidgetTester tester) async {
+      test('should split words on comma', () {
         expect(TextSplitter.split('first,second'), [
-          TranslatableTextPart('first'),
-          TextPart(','),
-          TranslatableTextPart('second')
+          const TranslatableTextPart('first'),
+          const TextPart(','),
+          const TranslatableTextPart('second')
         ]);
       });
-      testWidgets('should split words on period', (WidgetTester tester) async {
+      test('should split words on period', () {
         expect(TextSplitter.split('first.second'), [
-          TranslatableTextPart('first'),
-          TextPart('.'),
-          TranslatableTextPart('second')
+          const TranslatableTextPart('first'),
+          const TextPart('.'),
+          const TranslatableTextPart('second')
         ]);
       });
-      testWidgets('should not split on umlauts', (WidgetTester tester) async {
-        expect(TextSplitter.split('können'), [TranslatableTextPart('können')]);
+      test('should not split on umlauts', () {
+        expect(TextSplitter.split('können'),
+            [const TranslatableTextPart('können')]);
       });
-      testWidgets('should not split on \'', (WidgetTester tester) async {
-        expect(TextSplitter.split('it\'s'), [TranslatableTextPart('it\'s')]);
+      test('should not split on \'', () {
+        expect(
+            TextSplitter.split('it\'s'), [const TranslatableTextPart('it\'s')]);
       });
-      testWidgets('should not split on dash', (WidgetTester tester) async {
+      test('should not split on dash', () {
         expect(TextSplitter.split('Java-Entwicklung'),
-            [TranslatableTextPart('Java-Entwicklung')]);
+            [const TranslatableTextPart('Java-Entwicklung')]);
       });
-      testWidgets('should not split on numbers', (WidgetTester tester) async {
+      test('should not split on numbers', () {
         expect(TextSplitter.split('year 2022.'), [
-          TranslatableTextPart('year'),
-          TextPart(' '),
-          TextPart('2022'),
-          TextPart('.')
+          const TranslatableTextPart('year'),
+          const TextPart(' '),
+          const TextPart('2022'),
+          const TextPart('.')
         ]);
       });
     });

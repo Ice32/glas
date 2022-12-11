@@ -1,9 +1,12 @@
+import 'package:meta/meta.dart';
+
+@immutable
 class ImportDTO {
   final String text;
   final String title;
   final int id;
 
-  ImportDTO({
+  const ImportDTO({
     required this.title,
     required this.text,
     required this.id,

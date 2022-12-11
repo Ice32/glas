@@ -57,7 +57,6 @@ class MockGlasHttpClient extends _i1.Mock implements _i4.GlasHttpClient {
           Invocation.getter(#logger),
         ),
       ) as _i2.Logger);
-
   @override
   _i5.Future<_i3.Response> post(
     String? path,
@@ -93,7 +92,6 @@ class MockGlasHttpClient extends _i1.Mock implements _i4.GlasHttpClient {
           ),
         )),
       ) as _i5.Future<_i3.Response>);
-
   @override
   _i5.Future<_i3.Response> get(
     String? path, [

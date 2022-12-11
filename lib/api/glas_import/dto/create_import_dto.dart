@@ -1,8 +1,11 @@
+import 'package:meta/meta.dart';
+
+@immutable
 class CreateImportDTO {
   final String text;
   final String title;
 
-  CreateImportDTO({
+  const CreateImportDTO({
     required this.title,
     required this.text,
   });

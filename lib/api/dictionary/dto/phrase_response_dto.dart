@@ -1,10 +1,12 @@
 import 'package:glas_client/api/dictionary/dto/translation_dto.dart';
+import 'package:meta/meta.dart';
 
+@immutable
 class PhraseResponseDTO {
   final String phrase;
   final List<TranslationDTO> translations;
 
-  PhraseResponseDTO({
+  const PhraseResponseDTO({
     required this.phrase,
     required this.translations,
   });

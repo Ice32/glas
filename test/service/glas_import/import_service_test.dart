@@ -71,7 +71,7 @@ void main() {
           ImportDTO(id: 2, title: 'second import', text: 'second import'),
         ];
         when(client.get('imports')).thenAnswer((realInvocation) =>
-            Future.value(http.Response(jsonEncode(imports), 204)));
+            Future.value(http.Response(jsonEncode(imports), 200)));
 
         var actual = await ImportService().getImports();
 

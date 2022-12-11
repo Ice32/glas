@@ -1,8 +1,11 @@
+import 'package:meta/meta.dart';
+
+@immutable
 class TranslationDTO {
   final String translation;
   final String source;
 
-  TranslationDTO({
+  const TranslationDTO({
     required this.translation,
     required this.source,
   });

@@ -2,16 +2,16 @@ import 'dart:convert';
 
 import 'package:get_it/get_it.dart';
 import 'package:glas_client/api/dictionary/dto/phrase_response_dto.dart';
-import 'package:glas_client/service/import/text_part.dart';
-import 'package:glas_client/service/import/text_splitter.dart';
+import 'package:meta/meta.dart';
 
 import '../../api/glas_http_client.dart';
 
+@immutable
 class DictionaryService {
-  final GlasHttpClient httpClient = GetIt.instance.get<GlasHttpClient>();
+  final GlasHttpClient _httpClient = GetIt.instance.get<GlasHttpClient>();
 
   Future<PhraseResponseDTO> getTranslations(String phrase) async {
-    final response = await httpClient.get('translations', {'phrase': phrase});
+    final response = await _httpClient.get('translations', {'phrase': phrase});
 
     if (response.statusCode < 200 || response.statusCode >= 300) {
       throw Exception(
@@ -19,9 +19,5 @@ class DictionaryService {
     }
 
     return PhraseResponseDTO.fromJson(jsonDecode(response.body));
-  }
-
-  List<TextPart> splitText(String text) {
-    return TextSplitter.split(text);
   }
 }

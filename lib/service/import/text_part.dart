@@ -1,7 +1,10 @@
+import 'package:meta/meta.dart';
+
+@immutable
 class TextPart {
   final String value;
 
-  TextPart(this.value);
+  const TextPart(this.value);
 
   @override
   bool operator ==(Object other) {
