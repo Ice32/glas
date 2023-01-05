@@ -67,13 +67,16 @@ class _TextWordState extends State<TextWord> {
         child: Text(
           widget.word.value,
           style: themeData.textTheme.bodyLarge?.merge(TextStyle(
+              height: 2,
               backgroundColor:
                   widget.word is TranslatableTextPart && widget.word is! Word
                       ? const Color(0xff9fcfff)
                       : themeData.textTheme.bodyLarge?.backgroundColor)),
         ),
         onTap: () {
-          tooltipController.showTooltip();
+          if (widget.word is TranslatableTextPart) {
+            tooltipController.showTooltip();
+          }
         },
       ),
     );
