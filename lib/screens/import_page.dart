@@ -60,7 +60,8 @@ class _ImportsPageState extends State<ImportPage> {
                     child: Padding(
               padding: const EdgeInsets.all(10),
               child: FutureBuilder<List<TextPart>>(
-                  future: TextExtractor.extract(widget.importDTO.text),
+                  future: TextExtractor.extract(
+                      widget.importDTO.text.replaceAll("\n\n", "")),
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
                       return RichText(
