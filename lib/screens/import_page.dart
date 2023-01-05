@@ -56,7 +56,8 @@ class _ImportsPageState extends State<ImportPage> {
               ),
             ),
             Expanded(
-                child: Padding(
+                child: SingleChildScrollView(
+                    child: Padding(
               padding: const EdgeInsets.all(10),
               child: FutureBuilder<List<TextPart>>(
                   future: TextExtractor.extract(widget.importDTO.text),
@@ -73,7 +74,7 @@ class _ImportsPageState extends State<ImportPage> {
                     }
                     return const Text('Loading...');
                   }),
-            ))
+            )))
           ],
         ));
   }
