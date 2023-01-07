@@ -4,6 +4,7 @@ import 'package:glas_client/api/glas_http_client.dart';
 import 'package:glas_client/screens/create_import_page.dart';
 import 'package:glas_client/screens/dictionary_page.dart';
 import 'package:glas_client/screens/imports_page.dart';
+import 'package:glas_client/screens/my_words_page.dart';
 import 'package:glas_client/service/dictionary/dictionary_service.dart';
 import 'package:glas_client/service/import/import_service.dart';
 import 'package:glas_client/service/import/known_words_service.dart';
@@ -31,7 +32,8 @@ class MyApp extends StatelessWidget {
       routes: {
         "/dictionary": (context) => const DictionaryPage(),
         "/import": (context) => const CreateImportPage(),
-        "/imports": (context) => const ImportsPage()
+        "/imports": (context) => const ImportsPage(),
+        "/my-words": (context) => const MyWordsPage()
       },
       initialRoute: "/dictionary",
     );

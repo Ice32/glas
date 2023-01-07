@@ -1,8 +1,11 @@
+import 'package:meta/meta.dart';
+
+@immutable
 class KnownWordDTO {
   final int id;
   final String text;
 
-  KnownWordDTO({
+  const KnownWordDTO({
     required this.id,
     required this.text,
   });
