@@ -100,7 +100,7 @@ void main() {
 
     testWidgets('taping import list item should open ImportPage',
         (WidgetTester tester) async {
-          stubImportsResponse(httpClient, [
+      stubImportsResponse(httpClient, [
         const ImportDTO(title: 'Import 1 title', text: 'Import 1 text', id: 1),
         const ImportDTO(title: 'Import 2 title', text: 'Import 2 text', id: 2)
       ]);

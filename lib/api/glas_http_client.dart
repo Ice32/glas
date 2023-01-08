@@ -9,7 +9,7 @@ class GlasHttpClient {
   static const baseUrl = "$protocol://$host";
   final logger = Logger();
 
-  Future<Response> post(String path, Map<String, String> body) {
+  Future<Response> post(String path, Map<String, dynamic> body) {
     return Client().post(Uri.parse("$baseUrl/$path"),
         body: jsonEncode(body),
         headers: {'Content-Type': 'application/json; charset=UTF-8'});

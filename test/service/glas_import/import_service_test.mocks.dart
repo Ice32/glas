@@ -60,7 +60,7 @@ class MockGlasHttpClient extends _i1.Mock implements _i4.GlasHttpClient {
   @override
   _i5.Future<_i3.Response> post(
     String? path,
-    Map<String, String>? body,
+    Map<String, dynamic>? body,
   ) =>
       (super.noSuchMethod(
         Invocation.method(

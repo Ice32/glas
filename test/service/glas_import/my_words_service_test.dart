@@ -41,7 +41,7 @@ void main() {
 
         await MyWordsService().createKnownWord(text);
 
-        verify(client.post('my-words', {'text': text}));
+        verify(client.post('my-words', {'text': text, 'isKnown': true}));
       });
 
       test('should throw exception if response status less than 200', () async {

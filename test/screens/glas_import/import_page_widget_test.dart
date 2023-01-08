@@ -80,7 +80,7 @@ void main() {
 
     testWidgets('should display each import text word as a separate span',
         (WidgetTester tester) async {
-          stubMyWordsResponse(httpClient, []);
+      stubMyWordsResponse(httpClient, []);
       const importDTO =
           ImportDTO(title: 'Import 1 title', text: 'Import 1 text', id: 1);
 
@@ -94,7 +94,7 @@ void main() {
 
     testWidgets('tapping on a word shows translation',
         (WidgetTester tester) async {
-          stubMyWordsResponse(httpClient, []);
+      stubMyWordsResponse(httpClient, []);
       stubTranslationsResponse(httpClient, 'text', [
         const TranslationDTO(translation: 'text translation', source: 'text')
       ]);
@@ -140,7 +140,7 @@ void main() {
 
     testWidgets('should hide translations with duplicate text',
         (WidgetTester tester) async {
-          stubMyWordsResponse(httpClient, []);
+      stubMyWordsResponse(httpClient, []);
       stubTranslationsResponse(httpClient, 'text', [
         const TranslationDTO(translation: 'text translation 1', source: 'text'),
         const TranslationDTO(
@@ -171,7 +171,7 @@ void main() {
 
     testWidgets("tapping on 'I know this word' calls API",
         (WidgetTester tester) async {
-          const word = 'aWord';
+      const word = 'aWord';
       stubMyWordsResponse(httpClient, []);
       when(httpClient.post('my-words', any))
           .thenAnswer((realInvocation) => Future.value(http.Response('', 204)));
@@ -187,12 +187,12 @@ void main() {
 
       await tester.tap(find.text('I know this word'));
 
-      verify(httpClient.post('my-words', {'text': word}));
+      verify(httpClient.post('my-words', {'text': word, 'isKnown': true}));
     });
 
     testWidgets('should display untranslatable text parts without background',
         (WidgetTester tester) async {
-          stubMyWordsResponse(httpClient, []);
+      stubMyWordsResponse(httpClient, []);
       const importDTO =
           ImportDTO(title: 'Import 1 title', text: 'Import 1 text.', id: 1);
 

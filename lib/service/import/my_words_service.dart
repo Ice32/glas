@@ -13,7 +13,7 @@ class MyWordsService {
 
   Future<void> createKnownWord(String text) async {
     final response = await _httpClient.post(
-        'my-words', CreateMyWordDTO(text: text).toJson());
+        'my-words', CreateMyWordDTO(text: text, isKnown: true).toJson());
 
     if (response.statusCode < 200 || response.statusCode >= 300) {
       throw Exception('Failed to create known word: ${response.reasonPhrase}');
