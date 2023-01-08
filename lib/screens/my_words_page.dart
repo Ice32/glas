@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import 'package:glas_client/api/glas_import/dto/known_word_dto.dart';
-import 'package:glas_client/service/import/known_words_service.dart';
+import 'package:glas_client/api/glas_import/dto/my_word_dto.dart';
+import 'package:glas_client/service/import/my_words_service.dart';
 import 'package:glas_client/shared/drawer_menu.dart';
 import 'package:logger/logger.dart';
 
@@ -17,7 +17,7 @@ class MyWordsPage extends StatefulWidget {
 }
 
 class _MyWordsPageState extends State<MyWordsPage> {
-  final _knownWordsService = getIt.get<KnownWordsService>();
+  final _myWordsService = getIt.get<MyWordsService>();
   final _logger = Logger();
 
   @override
@@ -39,8 +39,8 @@ class _MyWordsPageState extends State<MyWordsPage> {
           title: const Text("My words"),
         ),
         drawer: const DrawerMenu(),
-        body: FutureBuilder<List<KnownWordDTO>>(
-          future: _knownWordsService.getKnownWords(),
+        body: FutureBuilder<List<MyWordDTO>>(
+          future: _myWordsService.geMyWords(),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               return ListView.builder(

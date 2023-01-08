@@ -1,10 +1,10 @@
 import 'package:meta/meta.dart';
 
 @immutable
-class CreateKnownWordDTO {
+class CreateMyWordDTO {
   final String text;
 
-  const CreateKnownWordDTO({
+  const CreateMyWordDTO({
     required this.text,
   });
 

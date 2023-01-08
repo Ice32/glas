@@ -5,8 +5,8 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'dart:async' as _i3;
 
-import 'package:glas_client/api/glas_import/dto/known_word_dto.dart' as _i4;
-import 'package:glas_client/service/import/known_words_service.dart' as _i2;
+import 'package:glas_client/api/glas_import/dto/my_word_dto.dart' as _i4;
+import 'package:glas_client/service/import/my_words_service.dart' as _i2;
 import 'package:mockito/mockito.dart' as _i1;
 
 // ignore_for_file: type=lint
@@ -20,11 +20,11 @@ import 'package:mockito/mockito.dart' as _i1;
 // ignore_for_file: camel_case_types
 // ignore_for_file: subtype_of_sealed_class
 
-/// A class which mocks [KnownWordsService].
+/// A class which mocks [MyWordsService].
 ///
 /// See the documentation for Mockito's code generation for more information.
 // ignore: must_be_immutable
-class MockKnownWordsService extends _i1.Mock implements _i2.KnownWordsService {
+class MockMyWordsService extends _i1.Mock implements _i2.MyWordsService {
   @override
   _i3.Future<void> createKnownWord(String? text) => (super.noSuchMethod(
         Invocation.method(
@@ -34,15 +34,15 @@ class MockKnownWordsService extends _i1.Mock implements _i2.KnownWordsService {
         returnValue: _i3.Future<void>.value(),
         returnValueForMissingStub: _i3.Future<void>.value(),
       ) as _i3.Future<void>);
+
   @override
-  _i3.Future<List<_i4.KnownWordDTO>> getKnownWords() => (super.noSuchMethod(
+  _i3.Future<List<_i4.MyWordDTO>> geMyWords() => (super.noSuchMethod(
         Invocation.method(
-          #getKnownWords,
+          #geMyWords,
           [],
         ),
-        returnValue:
-            _i3.Future<List<_i4.KnownWordDTO>>.value(<_i4.KnownWordDTO>[]),
+        returnValue: _i3.Future<List<_i4.MyWordDTO>>.value(<_i4.MyWordDTO>[]),
         returnValueForMissingStub:
-            _i3.Future<List<_i4.KnownWordDTO>>.value(<_i4.KnownWordDTO>[]),
-      ) as _i3.Future<List<_i4.KnownWordDTO>>);
+            _i3.Future<List<_i4.MyWordDTO>>.value(<_i4.MyWordDTO>[]),
+      ) as _i3.Future<List<_i4.MyWordDTO>>);
 }

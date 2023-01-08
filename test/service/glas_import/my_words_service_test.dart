@@ -3,13 +3,13 @@ import 'dart:convert';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
 import 'package:glas_client/api/glas_http_client.dart';
-import 'package:glas_client/api/glas_import/dto/known_word_dto.dart';
-import 'package:glas_client/service/import/known_words_service.dart';
+import 'package:glas_client/api/glas_import/dto/my_word_dto.dart';
+import 'package:glas_client/service/import/my_words_service.dart';
 import 'package:http/http.dart' as http;
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 
-import 'known_words_service_test.mocks.dart';
+import 'my_words_service_test.mocks.dart';
 
 final getIt = GetIt.instance;
 
@@ -20,7 +20,7 @@ void stubResponseStatus(MockGlasHttpClient client, int status) {
 
 @GenerateNiceMocks([MockSpec<GlasHttpClient>()])
 void main() {
-  group('Known words service', () {
+  group('My words service', () {
     late MockGlasHttpClient client;
 
     setUp(() {
@@ -35,60 +35,58 @@ void main() {
 
     group('Create known word', () {
       test('should call http client', () async {
-        when(client.post('known-words', any)).thenAnswer(
+        when(client.post('my-words', any)).thenAnswer(
             (realInvocation) => Future.value(http.Response('', 204)));
         const text = "aWord";
 
-        await KnownWordsService().createKnownWord(text);
+        await MyWordsService().createKnownWord(text);
 
-        verify(client.post('known-words', {'text': text}));
+        verify(client.post('my-words', {'text': text}));
       });
 
       test('should throw exception if response status less than 200', () async {
-        when(client.post('known-words', any)).thenAnswer(
+        when(client.post('my-words', any)).thenAnswer(
             (realInvocation) => Future.value(http.Response('', 199)));
 
-        expect(() async => KnownWordsService().createKnownWord('aWord'),
+        expect(() async => MyWordsService().createKnownWord('aWord'),
             throwsException);
       });
 
       test('should throw exception if response status > 299', () async {
-        when(client.post('known-words', any)).thenAnswer(
+        when(client.post('my-words', any)).thenAnswer(
             (realInvocation) => Future.value(http.Response('', 300)));
 
-        expect(() async => KnownWordsService().createKnownWord('aWord'),
+        expect(() async => MyWordsService().createKnownWord('aWord'),
             throwsException);
       });
     });
 
-    group('Get known words', () {
-      test('should return imports', () async {
-        List<KnownWordDTO> knownWords = [
-          KnownWordDTO(id: 1, text: 'first word'),
-          KnownWordDTO(id: 2, text: 'second word'),
+    group('Get my words', () {
+      test('should return my words', () async {
+        List<MyWordDTO> myWords = [
+          const MyWordDTO(id: 1, text: 'first word'),
+          const MyWordDTO(id: 2, text: 'second word'),
         ];
-        when(client.get('known-words')).thenAnswer((realInvocation) =>
-            Future.value(http.Response(jsonEncode(knownWords), 200)));
+        when(client.get('my-words')).thenAnswer((realInvocation) =>
+            Future.value(http.Response(jsonEncode(myWords), 200)));
 
-        var actual = await KnownWordsService().getKnownWords();
+        var actual = await MyWordsService().geMyWords();
 
-        expect(actual, equals(knownWords));
+        expect(actual, equals(myWords));
       });
 
       test('should throw exception if response status less than 200', () async {
-        when(client.get('known-words')).thenAnswer(
+        when(client.get('my-words')).thenAnswer(
             (realInvocation) => Future.value(http.Response('', 199)));
 
-        expect(
-            () async => KnownWordsService().getKnownWords(), throwsException);
+        expect(() async => MyWordsService().geMyWords(), throwsException);
       });
 
       test('should throw exception if response status > 299', () async {
-        when(client.get('known-words')).thenAnswer(
+        when(client.get('my-words')).thenAnswer(
             (realInvocation) => Future.value(http.Response('', 300)));
 
-        expect(
-            () async => KnownWordsService().getKnownWords(), throwsException);
+        expect(() async => MyWordsService().geMyWords(), throwsException);
       });
     });
   });

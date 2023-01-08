@@ -3,7 +3,7 @@ import 'dart:math';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import 'package:glas_client/service/import/known_words_service.dart';
+import 'package:glas_client/service/import/my_words_service.dart';
 
 import '../api/dictionary/dto/phrase_response_dto.dart';
 
@@ -22,7 +22,7 @@ class WordTooltipContent extends StatefulWidget {
 
 class _WordTooltipContentState extends State<WordTooltipContent> {
   static const numTranslationsToShow = 5;
-  final knownWordsService = getIt.get<KnownWordsService>();
+  final myWordsService = getIt.get<MyWordsService>();
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +53,7 @@ class _WordTooltipContentState extends State<WordTooltipContent> {
                 ),
                 key: const Key('iKnowThisWordButton'),
                 onPressed: () =>
-                    knownWordsService.createKnownWord(phraseResponse.phrase),
+                    myWordsService.createKnownWord(phraseResponse.phrase),
                 label: const Text("I know this word")),
           ],
         )

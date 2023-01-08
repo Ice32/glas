@@ -1,7 +1,7 @@
 import 'package:collection/collection.dart';
 import 'package:get_it/get_it.dart';
-import 'package:glas_client/api/glas_import/dto/known_word_dto.dart';
-import 'package:glas_client/service/import/known_words_service.dart';
+import 'package:glas_client/api/glas_import/dto/my_word_dto.dart';
+import 'package:glas_client/service/import/my_words_service.dart';
 import 'package:glas_client/service/import/text_part.dart';
 import 'package:glas_client/service/import/text_splitter.dart';
 import 'package:glas_client/service/import/word.dart';
@@ -11,15 +11,15 @@ final getIt = GetIt.instance;
 
 @immutable
 class TextExtractor {
-  static final knownWordsService = getIt.get<KnownWordsService>();
+  static final myWordsService = getIt.get<MyWordsService>();
 
   static Future<List<TextPart>> extract(String text) async {
-    var knownWords = await knownWordsService.getKnownWords();
+    var myWords = await myWordsService.geMyWords();
     return TextSplitter.split(text).map((e) {
-      final KnownWordDTO? knownWord =
-          knownWords.firstWhereOrNull((kw) => kw.text == e.value);
-      if (knownWord != null) {
-        return Word(e.value, knownWord: knownWord);
+      final MyWordDTO? myWord =
+          myWords.firstWhereOrNull((kw) => kw.text == e.value);
+      if (myWord != null) {
+        return Word(e.value, myWord: myWord);
       }
       return e;
     }).toList();

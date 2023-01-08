@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
 import 'package:glas_client/api/glas_http_client.dart';
-import 'package:glas_client/api/glas_import/dto/known_word_dto.dart';
+import 'package:glas_client/api/glas_import/dto/my_word_dto.dart';
 import 'package:glas_client/screens/my_words_page.dart';
-import 'package:glas_client/service/import/known_words_service.dart';
+import 'package:glas_client/service/import/my_words_service.dart';
 import 'package:http/http.dart' as http;
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
@@ -27,10 +27,10 @@ MaterialApp myWordsPage(GlobalKey<ScaffoldState> myWordsPageScaffoldKey) {
   );
 }
 
-void stubKnownWordsResponse(
-    MockGlasHttpClient httpClient, List<KnownWordDTO> knownWords) {
-  when(httpClient.get('known-words', any)).thenAnswer((realInvocation) =>
-      Future.value(http.Response(jsonEncode(knownWords), 200)));
+void stubMyWordsResponse(
+    MockGlasHttpClient httpClient, List<MyWordDTO> myWords) {
+  when(httpClient.get('my-words', any)).thenAnswer((realInvocation) =>
+      Future.value(http.Response(jsonEncode(myWords), 200)));
 }
 
 @GenerateNiceMocks([MockSpec<GlasHttpClient>()])
@@ -41,7 +41,7 @@ void main() {
   setUp(() {
     var glasHttpClient = MockGlasHttpClient();
     getIt.registerSingleton<GlasHttpClient>(glasHttpClient);
-    getIt.registerSingleton<KnownWordsService>(KnownWordsService());
+    getIt.registerSingleton<MyWordsService>(MyWordsService());
     httpClient = glasHttpClient;
   });
 
@@ -50,10 +50,10 @@ void main() {
   });
 
   group('My words page widget test', () {
-    testWidgets('should render known words', (WidgetTester tester) async {
-      stubKnownWordsResponse(httpClient, [
-        const KnownWordDTO(text: 'Word1', id: 1),
-        const KnownWordDTO(text: 'Word2', id: 2)
+    testWidgets('should render my words', (WidgetTester tester) async {
+      stubMyWordsResponse(httpClient, [
+        const MyWordDTO(text: 'Word1', id: 1),
+        const MyWordDTO(text: 'Word2', id: 2)
       ]);
 
       await tester.pumpWidget(myWordsPage(myWordsPageScaffoldKey));

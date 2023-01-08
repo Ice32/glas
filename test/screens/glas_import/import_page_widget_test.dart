@@ -7,10 +7,10 @@ import 'package:glas_client/api/dictionary/dto/phrase_response_dto.dart';
 import 'package:glas_client/api/dictionary/dto/translation_dto.dart';
 import 'package:glas_client/api/glas_http_client.dart';
 import 'package:glas_client/api/glas_import/dto/import_dto.dart';
-import 'package:glas_client/api/glas_import/dto/known_word_dto.dart';
+import 'package:glas_client/api/glas_import/dto/my_word_dto.dart';
 import 'package:glas_client/screens/import_page.dart';
 import 'package:glas_client/service/dictionary/dictionary_service.dart';
-import 'package:glas_client/service/import/known_words_service.dart';
+import 'package:glas_client/service/import/my_words_service.dart';
 import 'package:http/http.dart' as http;
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
@@ -26,12 +26,12 @@ void stubTranslationsResponse(MockGlasHttpClient httpClient, String phrase,
           200)));
 }
 
-void stubKnownWordsResponse(
-    MockGlasHttpClient httpClient, List<KnownWordDTO> knownWords) {
+void stubMyWordsResponse(
+    MockGlasHttpClient httpClient, List<MyWordDTO> myWords) {
   when((GetIt.instance.get<GlasHttpClient>() as MockGlasHttpClient)
-          .get('known-words', any))
+          .get('my-words', any))
       .thenAnswer((realInvocation) =>
-          Future.value(http.Response(jsonEncode(knownWords), 200)));
+          Future.value(http.Response(jsonEncode(myWords), 200)));
 }
 
 MaterialApp importPage(
@@ -59,7 +59,7 @@ void main() {
     setUp(() async {
       getIt.registerSingleton<GlasHttpClient>(httpClient);
       getIt.registerSingleton<DictionaryService>(DictionaryService());
-      getIt.registerSingleton<KnownWordsService>(KnownWordsService());
+      getIt.registerSingleton<MyWordsService>(MyWordsService());
     });
 
     tearDown(() async {
@@ -68,7 +68,7 @@ void main() {
     });
 
     testWidgets('should render title', (WidgetTester tester) async {
-      stubKnownWordsResponse(httpClient, []);
+      stubMyWordsResponse(httpClient, []);
       const importDTO =
           ImportDTO(title: 'Import 1 title', text: 'Import 1 text', id: 1);
 
@@ -80,7 +80,7 @@ void main() {
 
     testWidgets('should display each import text word as a separate span',
         (WidgetTester tester) async {
-      stubKnownWordsResponse(httpClient, []);
+          stubMyWordsResponse(httpClient, []);
       const importDTO =
           ImportDTO(title: 'Import 1 title', text: 'Import 1 text', id: 1);
 
@@ -94,7 +94,7 @@ void main() {
 
     testWidgets('tapping on a word shows translation',
         (WidgetTester tester) async {
-      stubKnownWordsResponse(httpClient, []);
+          stubMyWordsResponse(httpClient, []);
       stubTranslationsResponse(httpClient, 'text', [
         const TranslationDTO(translation: 'text translation', source: 'text')
       ]);
@@ -112,7 +112,7 @@ void main() {
     });
 
     testWidgets('should show 5 translations', (WidgetTester tester) async {
-      stubKnownWordsResponse(httpClient, []);
+      stubMyWordsResponse(httpClient, []);
       stubTranslationsResponse(httpClient, 'text', [
         const TranslationDTO(translation: 'text translation 1', source: 'text'),
         const TranslationDTO(translation: 'text translation 2', source: 'text'),
@@ -140,7 +140,7 @@ void main() {
 
     testWidgets('should hide translations with duplicate text',
         (WidgetTester tester) async {
-      stubKnownWordsResponse(httpClient, []);
+          stubMyWordsResponse(httpClient, []);
       stubTranslationsResponse(httpClient, 'text', [
         const TranslationDTO(translation: 'text translation 1', source: 'text'),
         const TranslationDTO(
@@ -171,9 +171,9 @@ void main() {
 
     testWidgets("tapping on 'I know this word' calls API",
         (WidgetTester tester) async {
-      const word = 'aWord';
-      stubKnownWordsResponse(httpClient, []);
-      when(httpClient.post('known-words', any))
+          const word = 'aWord';
+      stubMyWordsResponse(httpClient, []);
+      when(httpClient.post('my-words', any))
           .thenAnswer((realInvocation) => Future.value(http.Response('', 204)));
       stubTranslationsResponse(httpClient, word, [
         const TranslationDTO(translation: 'text translation', source: word)
@@ -187,12 +187,12 @@ void main() {
 
       await tester.tap(find.text('I know this word'));
 
-      verify(httpClient.post('known-words', {'text': word}));
+      verify(httpClient.post('my-words', {'text': word}));
     });
 
     testWidgets('should display untranslatable text parts without background',
         (WidgetTester tester) async {
-      stubKnownWordsResponse(httpClient, []);
+          stubMyWordsResponse(httpClient, []);
       const importDTO =
           ImportDTO(title: 'Import 1 title', text: 'Import 1 text.', id: 1);
 
@@ -209,7 +209,7 @@ void main() {
 
     testWidgets('should display known words without a background color',
         (WidgetTester tester) async {
-      stubKnownWordsResponse(httpClient, [KnownWordDTO(id: 1, text: 'text')]);
+          stubMyWordsResponse(httpClient, [const MyWordDTO(id: 1, text: 'text')]);
       const importDTO =
           ImportDTO(title: 'Import 1 title', text: 'Import 1 text', id: 1);
 

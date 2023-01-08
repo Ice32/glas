@@ -1,17 +1,17 @@
 import 'package:meta/meta.dart';
 
 @immutable
-class KnownWordDTO {
+class MyWordDTO {
   final int id;
   final String text;
 
-  const KnownWordDTO({
+  const MyWordDTO({
     required this.id,
     required this.text,
   });
 
-  factory KnownWordDTO.fromJson(Map<String, dynamic> json) {
-    return KnownWordDTO(
+  factory MyWordDTO.fromJson(Map<String, dynamic> json) {
+    return MyWordDTO(
       id: json['id'],
       text: json['text'],
     );
@@ -23,7 +23,7 @@ class KnownWordDTO {
 
   @override
   bool operator ==(Object other) {
-    return other is KnownWordDTO && id == other.id;
+    return other is MyWordDTO && id == other.id;
   }
 
   @override
