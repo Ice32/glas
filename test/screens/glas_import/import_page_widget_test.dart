@@ -188,6 +188,8 @@ void main() {
       await tester.tap(find.text('I know this word'));
 
       verify(httpClient.post('my-words', {'text': word, 'isKnown': true}));
+      await tester.pumpAndSettle();
+      expect(find.text('I know this word'), findsNothing);
     });
 
     testWidgets('should display untranslatable text parts without background',

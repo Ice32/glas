@@ -11,9 +11,12 @@ final getIt = GetIt.instance;
 
 class WordTooltipContent extends StatefulWidget {
   late final PhraseResponseDTO phraseResponseDTO;
+  late final Function actionTaken;
 
-  WordTooltipContent(PhraseResponseDTO data, {Key? key}) : super(key: key) {
+  WordTooltipContent(PhraseResponseDTO data, Function callback, {Key? key})
+      : super(key: key) {
     phraseResponseDTO = data;
+    actionTaken = callback;
   }
 
   @override
@@ -52,8 +55,9 @@ class _WordTooltipContentState extends State<WordTooltipContent> {
                   color: Color(0xffffd517),
                 ),
                 key: const Key('iKnowThisWordButton'),
-                onPressed: () =>
-                    myWordsService.createKnownWord(phraseResponse.phrase),
+                onPressed: () => myWordsService
+                    .createKnownWord(phraseResponse.phrase)
+                    .then((value) => widget.actionTaken()),
                 label: const Text("I know this word")),
           ],
         )
