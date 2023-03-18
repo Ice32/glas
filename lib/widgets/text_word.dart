@@ -55,7 +55,9 @@ class _TextWordState extends State<TextWord> {
                 if (resolvedPhraseResponse.translations.isEmpty) {
                   return const Text('No translation found');
                 }
-                return WordTooltipContent(resolvedPhraseResponse,
+                return WordTooltipContent(
+                    resolvedPhraseResponse,
+                    widget.word is! Word,
                     () => tooltipController.hideTooltip());
               }
               if (snapshot.hasError) {

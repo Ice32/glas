@@ -17,7 +17,7 @@ class _DictionaryPageState extends State<DictionaryPage> {
   final dictionaryService = getIt.get<DictionaryService>();
 
   PhraseResponseDTO phraseResponse =
-      PhraseResponseDTO(phrase: "", translations: []);
+      const PhraseResponseDTO(phrase: "", translations: []);
 
   @override
   void initState() {

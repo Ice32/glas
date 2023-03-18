@@ -11,13 +11,12 @@ final getIt = GetIt.instance;
 
 class WordTooltipContent extends StatefulWidget {
   late final PhraseResponseDTO phraseResponseDTO;
+  late final bool showAddingOptions;
   late final Function actionTaken;
 
-  WordTooltipContent(PhraseResponseDTO data, Function callback, {Key? key})
-      : super(key: key) {
-    phraseResponseDTO = data;
-    actionTaken = callback;
-  }
+  WordTooltipContent(
+      this.phraseResponseDTO, this.showAddingOptions, this.actionTaken,
+      {Key? key});
 
   @override
   State<WordTooltipContent> createState() => _WordTooltipContentState();
@@ -40,18 +39,19 @@ class _WordTooltipContentState extends State<WordTooltipContent> {
             .sublist(0,
                 min(numTranslationsToShow, phraseResponse.translations.length))
             .mapIndexed((i, t) => Text("${i + 1}: ${t.translation}")),
-        Row(
-          children: [
-            Container(
-              margin: const EdgeInsets.only(right: 5),
-              child: ElevatedButton(
-                  key: const Key('addToMyWordsButton'),
-                  onPressed: () {},
-                  child: const Text("Add to my words")),
-            ),
-            OutlinedButton.icon(
-                icon: const Icon(
-                  Icons.lightbulb,
+        if (widget.showAddingOptions)
+          Row(
+            children: [
+              Container(
+                margin: const EdgeInsets.only(right: 5),
+                child: ElevatedButton(
+                    key: const Key('addToMyWordsButton'),
+                    onPressed: () {},
+                    child: const Text("Add to my words")),
+              ),
+              OutlinedButton.icon(
+                  icon: const Icon(
+                    Icons.lightbulb,
                   color: Color(0xffffd517),
                 ),
                 key: const Key('iKnowThisWordButton'),

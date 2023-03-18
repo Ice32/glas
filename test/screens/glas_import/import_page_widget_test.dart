@@ -111,6 +111,26 @@ void main() {
       expect(find.text('I know this word'), findsOneWidget);
     });
 
+    testWidgets(
+        'tapping on a known word doesnt show buttons to add to my words',
+        (WidgetTester tester) async {
+      stubMyWordsResponse(httpClient, [const MyWordDTO(id: 1, text: 'text')]);
+      stubTranslationsResponse(httpClient, 'text', [
+        const TranslationDTO(translation: 'text translation', source: 'text')
+      ]);
+      const importDTO =
+          ImportDTO(title: 'Import 1 title', text: 'Import 1 text', id: 1);
+
+      await tester.pumpWidget(importPage(importPageScaffoldKey, importDTO));
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.text('text'));
+      await tester.pumpAndSettle();
+
+      expect(find.textContaining('text translation'), findsOneWidget);
+      expect(find.text('I know this word'), findsNothing);
+    });
+
     testWidgets('should show 5 translations', (WidgetTester tester) async {
       stubMyWordsResponse(httpClient, []);
       stubTranslationsResponse(httpClient, 'text', [
